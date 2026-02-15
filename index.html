@@ -398,12 +398,9 @@
             const btn = document.getElementById('newMemeBtn');
             btn.disabled = true;
             
-            document.getElementById('memeContainer').innerHTML = '<div class="loading">Fetching fresh trash pandas</div>';
-            
-            setTimeout(() => {
-                displayRandomMeme();
-                btn.disabled = false;
-            }, 300);
+            // Images are preloaded, so display instantly!
+            displayRandomMeme();
+            btn.disabled = false;
         }
 
         function visitReddit() {
