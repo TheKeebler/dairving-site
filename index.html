@@ -46,7 +46,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image:
+            background-image: 
                 radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 80% 80%, rgba(0, 217, 163, 0.1) 0%, transparent 50%);
             animation: backgroundPulse 8s ease-in-out infinite;
@@ -109,7 +109,7 @@
             border: 2px solid rgba(255, 255, 255, 0.1);
             padding: 30px;
             margin-bottom: 30px;
-            box-shadow:
+            box-shadow: 
                 0 20px 60px rgba(0, 0, 0, 0.4),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
             animation: scaleIn 0.5s ease-out 0.4s backwards;
@@ -118,7 +118,7 @@
 
         .meme-container:hover {
             transform: translateY(-5px);
-            box-shadow:
+            box-shadow: 
                 0 25px 70px rgba(0, 0, 0, 0.5),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
@@ -316,33 +316,25 @@
     </div>
 
     <script>
-        // Raccoon memes using local images - you'll upload these with the HTML
-        // To add memes: Download images from Reddit, save to /images/ folder, add entries here
-        const currentPosts = [
-            {
-                title: "I forgot to take mine this morning 😢",
-                url: "./images/meme1.jpg"
-            },
-            {
-                title: "It be that way",
-                url: "./images/meme2.jpg"
-            },
-            {
-                title: "Same lil dude",
-                url: "./images/meme3.jpg"
-            },
-            {
-                title: "Yee haw",
-                url: "./images/meme4.jpg"
-            }
-        ];
-
+        let currentPosts = [];
         let usedIndices = [];
 
-        function fetchMemes() {
-            // No API call needed - using local images!
-            usedIndices = [];
-            displayRandomMeme();
+        // Load memes from external JSON file
+        async function fetchMemes() {
+            try {
+                const response = await fetch('./memes.json');
+                currentPosts = await response.json();
+                usedIndices = [];
+                displayRandomMeme();
+            } catch (error) {
+                console.error('Error loading memes:', error);
+                document.getElementById('memeContainer').innerHTML = `
+                    <div class="error">
+                        <h3>🦝 Oops! Couldn't load the memes</h3>
+                        <p>Make sure memes.json is in the same folder as index.html</p>
+                    </div>
+                `;
+            }
         }
 
         function displayRandomMeme() {
@@ -363,7 +355,7 @@
             document.getElementById('memeContainer').innerHTML = `
                 <h2 class="meme-title">${escapeHtml(post.title)}</h2>
                 <div class="meme-image-wrapper">
-                    <img src="${post.url}" alt="${escapeHtml(post.title)}" class="meme-image"
+                    <img src="${post.url}" alt="${escapeHtml(post.title)}" class="meme-image" 
                          onerror="this.parentElement.parentElement.innerHTML='<div class=error>Image failed to load. Click New Meme to try another!</div>'">
                 </div>
             `;
@@ -372,9 +364,9 @@
         function loadNewMeme() {
             const btn = document.getElementById('newMemeBtn');
             btn.disabled = true;
-
+            
             document.getElementById('memeContainer').innerHTML = '<div class="loading">Fetching fresh trash pandas</div>';
-
+            
             setTimeout(() => {
                 displayRandomMeme();
                 btn.disabled = false;
