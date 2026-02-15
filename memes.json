@@ -1,0 +1,18 @@
+[
+   {
+                title: "I forgot to take mine this morning 😢",
+                url: "./images/meme1.jpg"
+            },
+            {
+                title: "It be that way",
+                url: "./images/meme2.jpg"
+            },
+            {
+                title: "Same lil dude",
+                url: "./images/meme3.jpg"
+            },
+            {
+                title: "Yee haw",
+                url: "./images/meme4.jpg"
+            }
+]
