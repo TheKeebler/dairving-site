@@ -1,82 +1,422 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Random Raccoon Meme</title>
-  <meta charset="UTF-8" />
-  <style>
-    body {
-      background: #0f172a;
-      color: #e2e8f0;
-      text-align: center;
-      font-family: system-ui, -apple-system, sans-serif;
-      padding: 40px;
-    }
-
-    img {
-      max-width: 85%;
-      border-radius: 16px;
-      margin-top: 25px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    }
-
-    button {
-      margin-top: 25px;
-      padding: 12px 24px;
-      font-size: 1rem;
-      background: #1e293b;
-      color: white;
-      border: 1px solid #334155;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-
-  <h1>🦝 Random Raccoon Meme</h1>
-  <p id="title">Loading...</p>
-  <img id="meme" />
-  <br>
-  <button onclick="loadMeme()">New Raccoon</button>
-
-  <script>
-    async function loadMeme() {
-      try {
-        document.getElementById("title").innerText = "Loading...";
-
-        const response = await fetch(
-          "https://www.reddit.com/r/raccoonmemes/top.json?limit=50&t=month",
-          { headers: { "Accept": "application/json" } }
-        );
-
-        const data = await response.json();
-
-        const posts = data.data.children
-          .map(p => p.data)
-          .filter(post =>
-            post.post_hint === "image" &&
-            post.url &&
-            !post.url.includes("preview.redd.it")
-          );
-
-        if (!posts.length) {
-          throw new Error("No usable images found.");
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Raccoon Memes | dairving.com</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --trash-black: #1a1a1a;
+            --raccoon-gray: #4a4a4a;
+            --mask-charcoal: #2d2d2d;
+            --night-blue: #0a1929;
+            --moonlight: #e8f4f8;
+            --accent-orange: #ff6b35;
+            --accent-green: #00d9a3;
         }
 
-        const randomPost = posts[Math.floor(Math.random() * posts.length)];
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        document.getElementById("meme").src = randomPost.url;
-        document.getElementById("title").innerText = randomPost.title;
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, var(--night-blue) 0%, var(--trash-black) 100%);
+            color: var(--moonlight);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-      } catch (error) {
-        document.getElementById("title").innerText = "Failed to load raccoon.";
-        document.getElementById("meme").src = "";
-        console.error(error);
-      }
-    }
+        /* Animated background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 217, 163, 0.1) 0%, transparent 50%);
+            animation: backgroundPulse 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    loadMeme();
-  </script>
+        @keyframes backgroundPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
 
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            width: 100%;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideDown 0.6s ease-out 0.2s backwards;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-family: 'Righteous', cursive;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(255, 107, 53, 0.3);
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--moonlight);
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .meme-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            animation: scaleIn 0.5s ease-out 0.4s backwards;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .meme-container:hover {
+            transform: translateY(-5px);
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .meme-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--moonlight);
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .meme-image-wrapper {
+            position: relative;
+            width: 100%;
+            max-height: 600px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--mask-charcoal);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .meme-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+            max-height: 600px;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            font-size: 1.2rem;
+            color: var(--moonlight);
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            animation: slideUp 0.6s ease-out 0.6s backwards;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        button {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 16px 36px;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-orange), #ff8c5a);
+            color: white;
+            box-shadow: 0 8px 24px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(255, 107, 53, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--moonlight);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent-green);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 217, 163, 0.3);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .meta-info {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.95rem;
+            color: var(--moonlight);
+            opacity: 0.7;
+        }
+
+        .meta-info a {
+            color: var(--accent-green);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .meta-info a:hover {
+            color: var(--accent-orange);
+        }
+
+        .error {
+            background: rgba(255, 107, 53, 0.2);
+            border: 2px solid var(--accent-orange);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            color: var(--moonlight);
+        }
+
+        @media (max-width: 768px) {
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .meme-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🦝 TRASH PANDA MEMES</h1>
+            <p class="subtitle">Fresh from r/raccoonmemes</p>
+        </header>
+
+        <div class="meme-container" id="memeContainer">
+            <div class="loading">Loading raccoon wisdom</div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-primary" id="newMemeBtn" onclick="loadNewMeme()">
+                🎲 New Meme
+            </button>
+            <button class="btn-secondary" id="visitRedditBtn" onclick="visitReddit()">
+                📱 Visit Subreddit
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Raccoon memes using local images - you'll upload these with the HTML
+        // To add memes: Download images from Reddit, save to /images/ folder, add entries here
+        const currentPosts = [
+            {
+                title: "I forgot to take mine this morning 😢",
+                url: "./images/meme1.jpg"
+            },
+            {
+                title: "It be that way",
+                url: "./images/meme2.jpg"
+            },
+            {
+                title: "Me at 3am looking for snacks",
+                url: "./images/meme3.jpg"
+            },
+            {
+                title: "Raccoon life philosophy",
+                url: "./images/meme4.jpg"
+            },
+            {
+                title: "When you're adorable but also chaos incarnate",
+                url: "./images/meme5.jpg"
+            },
+            {
+                title: "Trash pandas being trash pandas",
+                url: "./images/meme6.jpg"
+            },
+            {
+                title: "When someone asks what I'm doing with my life",
+                url: "./images/meme7.jpg"
+            },
+            {
+                title: "Raccoon career goals",
+                url: "./images/meme8.jpg"
+            },
+            {
+                title: "Living my best trash panda life",
+                url: "./images/meme9.jpg"
+            },
+            {
+                title: "Me explaining why I need another snack",
+                url: "./images/meme10.jpg"
+            }
+        ];
+
+        let usedIndices = [];
+
+        function fetchMemes() {
+            // No API call needed - using local images!
+            usedIndices = [];
+            displayRandomMeme();
+        }
+
+        function displayRandomMeme() {
+            // If we've shown all memes, reset
+            if (usedIndices.length >= currentPosts.length) {
+                usedIndices = [];
+            }
+
+            // Get random index we haven't used
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * currentPosts.length);
+            } while (usedIndices.includes(randomIndex));
+
+            usedIndices.push(randomIndex);
+            const post = currentPosts[randomIndex];
+
+            document.getElementById('memeContainer').innerHTML = `
+                <h2 class="meme-title">${escapeHtml(post.title)}</h2>
+                <div class="meme-image-wrapper">
+                    <img src="${post.url}" alt="${escapeHtml(post.title)}" class="meme-image"
+                         onerror="this.parentElement.parentElement.innerHTML='<div class=error>Image failed to load. Click New Meme to try another!</div>'">
+                </div>
+            `;
+        }
+
+        function loadNewMeme() {
+            const btn = document.getElementById('newMemeBtn');
+            btn.disabled = true;
+
+            document.getElementById('memeContainer').innerHTML = '<div class="loading">Fetching fresh trash pandas</div>';
+
+            setTimeout(() => {
+                displayRandomMeme();
+                btn.disabled = false;
+            }, 300);
+        }
+
+        function visitReddit() {
+            window.open('https://reddit.com/r/raccoonmemes', '_blank', 'noopener');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Load initial memes on page load
+        fetchMemes();
+    </script>
 </body>
 </html>
