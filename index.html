@@ -297,7 +297,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>🦝 TRASH PANDA MEMES</h1>
+            <h1><span id="secretRaccoon" style="cursor: pointer;" title="🤫">🦝</span> TRASH PANDA MEMES</h1>
             <p class="subtitle">Fresh from r/raccoonmemes</p>
         </header>
 
@@ -406,6 +406,11 @@
         function visitReddit() {
             window.open('https://reddit.com/r/raccoonmemes', '_blank', 'noopener');
         }
+
+        // Secret easter egg: Click the raccoon emoji!
+        document.getElementById('secretRaccoon').addEventListener('click', function() {
+            window.location.href = 'video.html';
+        });
 
         function escapeHtml(text) {
             const div = document.createElement('div');
