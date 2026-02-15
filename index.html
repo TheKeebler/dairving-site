@@ -318,13 +318,13 @@
     <script>
         let currentPosts = [];
         let usedIndices = [];
+        let preloadedImages = new Map(); // Cache preloaded images
 
         // Load memes from external JSON file
-        async function fetchMemes() {
+        async function loadMemesFromJSON() {
             try {
                 const response = await fetch('./memes.json');
                 currentPosts = await response.json();
-                usedIndices = [];
                 displayRandomMeme();
             } catch (error) {
                 console.error('Error loading memes:', error);
@@ -335,6 +335,36 @@
                     </div>
                 `;
             }
+        }
+
+        // Preload the next N memes in background
+        function preloadNextMemes(count = 3) {
+            const memesToPreload = [];
+            let tempUsedIndices = [...usedIndices];
+            
+            // Figure out which memes we'll show next
+            for (let i = 0; i < count; i++) {
+                if (tempUsedIndices.length >= currentPosts.length) {
+                    tempUsedIndices = [];
+                }
+                
+                let randomIndex;
+                do {
+                    randomIndex = Math.floor(Math.random() * currentPosts.length);
+                } while (tempUsedIndices.includes(randomIndex));
+                
+                tempUsedIndices.push(randomIndex);
+                memesToPreload.push(currentPosts[randomIndex]);
+            }
+            
+            // Preload the images
+            memesToPreload.forEach(meme => {
+                if (!preloadedImages.has(meme.url)) {
+                    const img = new Image();
+                    img.src = meme.url;
+                    preloadedImages.set(meme.url, img);
+                }
+            });
         }
 
         function displayRandomMeme() {
@@ -359,6 +389,9 @@
                          onerror="this.parentElement.parentElement.innerHTML='<div class=error>Image failed to load. Click New Meme to try another!</div>'">
                 </div>
             `;
+            
+            // Preload next memes in background for instant navigation
+            preloadNextMemes(3);
         }
 
         function loadNewMeme() {
@@ -384,7 +417,7 @@
         }
 
         // Load initial memes on page load
-        fetchMemes();
+        loadMemesFromJSON();
     </script>
 </body>
 </html>
