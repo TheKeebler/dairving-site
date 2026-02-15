@@ -12,16 +12,11 @@
       padding: 40px;
     }
 
-    h1 {
-      font-size: 2.5rem;
-    }
-
     img {
       max-width: 85%;
       border-radius: 16px;
       margin-top: 25px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      transition: opacity 0.3s ease;
     }
 
     button {
@@ -34,17 +29,13 @@
       border-radius: 8px;
       cursor: pointer;
     }
-
-    button:hover {
-      background: #334155;
-    }
   </style>
 </head>
 <body>
 
   <h1>🦝 Random Raccoon Meme</h1>
   <p id="title">Loading...</p>
-  <img id="meme" src="" />
+  <img id="meme" />
   <br>
   <button onclick="loadMeme()">New Raccoon</button>
 
@@ -59,22 +50,21 @@
 
         const data = await response.json();
 
-        // Filter posts that actually contain images
-        const posts = data.items.filter(item =>
-          item.thumbnail && item.thumbnail.startsWith("http")
-        );
+        const imagePosts = data.items.filter(item => {
+          return item.enclosure && item.enclosure.link;
+        });
 
-        if (!posts.length) {
-          throw new Error("No raccoons found.");
+        if (!imagePosts.length) {
+          throw new Error("No images found.");
         }
 
-        const randomPost = posts[Math.floor(Math.random() * posts.length)];
+        const randomPost = imagePosts[Math.floor(Math.random() * imagePosts.length)];
 
-        document.getElementById("meme").src = randomPost.thumbnail;
+        document.getElementById("meme").src = randomPost.enclosure.link;
         document.getElementById("title").innerText = randomPost.title;
 
       } catch (error) {
-        document.getElementById("title").innerText = "Failed to load raccoon. Try again.";
+        document.getElementById("title").innerText = "Failed to load raccoon.";
         document.getElementById("meme").src = "";
       }
     }
