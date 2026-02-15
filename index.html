@@ -45,27 +45,33 @@
         document.getElementById("title").innerText = "Loading...";
 
         const response = await fetch(
-          "https://api.rss2json.com/v1/api.json?rss_url=https://www.reddit.com/r/raccoonmemes/.rss"
+          "https://www.reddit.com/r/raccoonmemes/top.json?limit=50&t=month",
+          { headers: { "Accept": "application/json" } }
         );
 
         const data = await response.json();
 
-        const imagePosts = data.items.filter(item => {
-          return item.enclosure && item.enclosure.link;
-        });
+        const posts = data.data.children
+          .map(p => p.data)
+          .filter(post =>
+            post.post_hint === "image" &&
+            post.url &&
+            !post.url.includes("preview.redd.it")
+          );
 
-        if (!imagePosts.length) {
-          throw new Error("No images found.");
+        if (!posts.length) {
+          throw new Error("No usable images found.");
         }
 
-        const randomPost = imagePosts[Math.floor(Math.random() * imagePosts.length)];
+        const randomPost = posts[Math.floor(Math.random() * posts.length)];
 
-        document.getElementById("meme").src = randomPost.enclosure.link;
+        document.getElementById("meme").src = randomPost.url;
         document.getElementById("title").innerText = randomPost.title;
 
       } catch (error) {
         document.getElementById("title").innerText = "Failed to load raccoon.";
         document.getElementById("meme").src = "";
+        console.error(error);
       }
     }
 
