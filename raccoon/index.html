@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Random Raccoon Memes | dairving.com</title>
+    
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
     <style>
         :root {
             --trash-black: #1a1a1a;
@@ -28,7 +29,7 @@
             position: fixed;
             top: 20px;
             left: 24px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
             font-size: 0.85rem;
             font-weight: 600;
             color: var(--moonlight);
@@ -43,7 +44,7 @@
         }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
             background: linear-gradient(135deg, var(--night-blue) 0%, var(--trash-black) 100%);
             color: var(--moonlight);
             min-height: 100vh;
@@ -206,7 +207,7 @@
         }
 
         button {
-            font-family: 'DM Sans', sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
             font-weight: 700;
             font-size: 1.1rem;
             padding: 16px 36px;
@@ -329,6 +330,9 @@
             <button class="btn-primary" id="newMemeBtn" onclick="loadNewMeme()">
                 🎲 New Meme
             </button>
+            <button class="btn-secondary" id="visitRedditBtn" onclick="visitReddit()">
+                📱 Visit Subreddit
+            </button>
         </div>
     </div>
 
@@ -409,6 +413,10 @@
             btn.disabled = true;
             displayRandomMeme();
             btn.disabled = false;
+        }
+
+        function visitReddit() {
+            window.open('https://reddit.com/r/raccoonmemes', '_blank', 'noopener');
         }
 
         document.getElementById('secretRaccoon').addEventListener('click', function() {
