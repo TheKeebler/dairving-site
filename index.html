@@ -1,425 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Raccoon Memes | dairving.com</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --trash-black: #1a1a1a;
-            --raccoon-gray: #4a4a4a;
-            --mask-charcoal: #2d2d2d;
-            --night-blue: #0a1929;
-            --moonlight: #e8f4f8;
-            --accent-orange: #ff6b35;
-            --accent-green: #00d9a3;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dairving.com</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --night-blue: #0a1929;
+      --trash-black: #1a1a1a;
+      --moonlight: #e8f4f8;
+      --accent-orange: #ff6b35;
+      --accent-green: #00d9a3;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(255, 255, 255, 0.1);
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: linear-gradient(135deg, var(--night-blue) 0%, var(--trash-black) 100%);
-            color: var(--moonlight);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            position: relative;
-            overflow-x: hidden;
-        }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: linear-gradient(135deg, var(--night-blue) 0%, var(--trash-black) 100%);
+      color: var(--moonlight);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
 
-        /* Animated background pattern */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 217, 163, 0.1) 0%, transparent 50%);
-            animation: backgroundPulse 8s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 40%, rgba(255, 107, 53, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(0, 217, 163, 0.08) 0%, transparent 50%);
+      animation: pulse 8s ease-in-out infinite;
+      pointer-events: none;
+    }
 
-        @keyframes backgroundPulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 0.8; }
-        }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
 
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 900px;
-            width: 100%;
-            animation: fadeIn 0.8s ease-out;
-        }
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 700px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 48px;
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    header {
+      text-align: center;
+      animation: slideDown 0.6s ease-out both;
+    }
 
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            animation: slideDown 0.6s ease-out 0.2s backwards;
-        }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    h1 {
+      font-family: 'Righteous', cursive;
+      font-size: clamp(2rem, 6vw, 3rem);
+      background: linear-gradient(135deg, var(--accent-orange), var(--accent-green));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
 
-        h1 {
-            font-family: 'Righteous', cursive;
-            font-size: clamp(2.5rem, 8vw, 4rem);
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, var(--accent-orange), var(--accent-green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 0 40px rgba(255, 107, 53, 0.3);
-            letter-spacing: -1px;
-        }
+    .tagline {
+      margin-top: 8px;
+      font-size: 0.95rem;
+      opacity: 0.5;
+      font-weight: 500;
+    }
 
-        .subtitle {
-            font-size: 1.1rem;
-            color: var(--moonlight);
-            opacity: 0.8;
-            font-weight: 500;
-        }
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      width: 100%;
+      animation: fadeUp 0.6s ease-out 0.2s both;
+    }
 
-        .meme-container {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            animation: scaleIn 0.5s ease-out 0.4s backwards;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-        .meme-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 
-                0 25px 70px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        }
+    .card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 28px 24px;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      text-decoration: none;
+      color: var(--moonlight);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
 
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      border-radius: 20px;
+    }
 
-        .meme-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: var(--moonlight);
-            line-height: 1.4;
-            text-align: center;
-        }
+    .card-raccoon::after {
+      background: radial-gradient(circle at top left, rgba(255, 107, 53, 0.1), transparent 60%);
+    }
 
-        .meme-image-wrapper {
-            position: relative;
-            width: 100%;
-            max-height: 600px;
-            border-radius: 16px;
-            overflow: hidden;
-            background: var(--mask-charcoal);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-        }
+    .card-game::after {
+      background: radial-gradient(circle at top left, rgba(0, 217, 163, 0.1), transparent 60%);
+    }
 
-        .meme-image {
-            width: 100%;
-            height: auto;
-            display: block;
-            object-fit: contain;
-            max-height: 600px;
-        }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    }
 
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 400px;
-            font-size: 1.2rem;
-            color: var(--moonlight);
-        }
+    .card:hover::after {
+      opacity: 1;
+    }
 
-        .loading::after {
-            content: '...';
-            animation: dots 1.5s steps(4, end) infinite;
-        }
+    .card-raccoon:hover {
+      border-color: rgba(255, 107, 53, 0.4);
+    }
 
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60%, 100% { content: '...'; }
-        }
+    .card-game:hover {
+      border-color: rgba(0, 217, 163, 0.4);
+    }
 
-        .button-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            animation: slideUp 0.6s ease-out 0.6s backwards;
-        }
+    .card-emoji {
+      font-size: 2.4rem;
+      line-height: 1;
+    }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .card-title {
+      font-family: 'Righteous', cursive;
+      font-size: 1.2rem;
+      letter-spacing: 0.2px;
+    }
 
-        button {
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-            padding: 16px 36px;
-            border: none;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+    .card-desc {
+      font-size: 0.88rem;
+      opacity: 0.55;
+      line-height: 1.5;
+    }
 
-        button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
+    .card-arrow {
+      margin-top: auto;
+      padding-top: 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
 
-        button:active::before {
-            width: 300px;
-            height: 300px;
-        }
+    .card-raccoon .card-arrow { color: var(--accent-orange); }
+    .card-game .card-arrow    { color: var(--accent-green); }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent-orange), #ff8c5a);
-            color: white;
-            box-shadow: 0 8px 24px rgba(255, 107, 53, 0.4);
-        }
+    .card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(255, 107, 53, 0.6);
-        }
+    footer {
+      font-size: 0.8rem;
+      opacity: 0.3;
+      animation: fadeUp 0.6s ease-out 0.4s both;
+    }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--moonlight);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: var(--accent-green);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 217, 163, 0.3);
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        .meta-info {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.95rem;
-            color: var(--moonlight);
-            opacity: 0.7;
-        }
-
-        .meta-info a {
-            color: var(--accent-green);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.2s ease;
-        }
-
-        .meta-info a:hover {
-            color: var(--accent-orange);
-        }
-
-        .error {
-            background: rgba(255, 107, 53, 0.2);
-            border: 2px solid var(--accent-orange);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            color: var(--moonlight);
-        }
-
-        @media (max-width: 768px) {
-            .button-group {
-                flex-direction: column;
-            }
-
-            button {
-                width: 100%;
-            }
-
-            .meme-container {
-                padding: 20px;
-            }
-        }
-    </style>
+    @media (max-width: 500px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><span id="secretRaccoon" style="cursor: pointer;" title="🤫">🦝</span> TRASH PANDA MEMES</h1>
-            <p class="subtitle">Handpicked from accross the internet</p>
-        </header>
+  <div class="container">
+    <header>
+      <h1>dairving.com</h1>
+      <p class="tagline">a couple of things</p>
+    </header>
 
-        <div class="meme-container" id="memeContainer">
-            <div class="loading">Loading raccoon wisdom</div>
-        </div>
+    <div class="cards">
+      <a class="card card-raccoon" href="raccoon.html">
+        <div class="card-emoji">🦝</div>
+        <div class="card-title">Trash Panda Memes</div>
+        <div class="card-desc">Handpicked raccoon memes.</div>
+        <div class="card-arrow">Open →</div>
+      </a>
 
-        <div class="button-group">
-            <button class="btn-primary" id="newMemeBtn" onclick="loadNewMeme()">
-                🎲 New Meme
-            </button>
-            <button class="btn-secondary" id="visitRedditBtn" onclick="visitReddit()">
-                📱 Visit Subreddit
-            </button>
-        </div>
+      <a class="card card-game" href="game.html">
+        <div class="card-emoji">🎯</div>
+        <div class="card-title">Real or Fake?</div>
+        <div class="card-desc">Can you spot the real cyber headlines from the made-up ones?</div>
+        <div class="card-arrow">Play →</div>
+      </a>
     </div>
 
-    <script>
-        let currentPosts = [];
-        let usedIndices = [];
-        let preloadedImages = new Map(); // Cache preloaded images
-
-        // Load memes from external JSON file
-        async function loadMemesFromJSON() {
-            try {
-                const response = await fetch('./memes.json');
-                currentPosts = await response.json();
-                displayRandomMeme();
-            } catch (error) {
-                console.error('Error loading memes:', error);
-                document.getElementById('memeContainer').innerHTML = `
-                    <div class="error">
-                        <h3>🦝 Oops! Couldn't load the memes</h3>
-                        <p>Make sure memes.json is in the same folder as index.html</p>
-                    </div>
-                `;
-            }
-        }
-
-        // Preload the next N memes in background
-        function preloadNextMemes(count = 3) {
-            const memesToPreload = [];
-            let tempUsedIndices = [...usedIndices];
-            
-            // Figure out which memes we'll show next
-            for (let i = 0; i < count; i++) {
-                if (tempUsedIndices.length >= currentPosts.length) {
-                    tempUsedIndices = [];
-                }
-                
-                let randomIndex;
-                do {
-                    randomIndex = Math.floor(Math.random() * currentPosts.length);
-                } while (tempUsedIndices.includes(randomIndex));
-                
-                tempUsedIndices.push(randomIndex);
-                memesToPreload.push(currentPosts[randomIndex]);
-            }
-            
-            // Preload the images
-            memesToPreload.forEach(meme => {
-                if (!preloadedImages.has(meme.url)) {
-                    const img = new Image();
-                    img.src = meme.url;
-                    preloadedImages.set(meme.url, img);
-                }
-            });
-        }
-
-        function displayRandomMeme() {
-            // If we've shown all memes, reset
-            if (usedIndices.length >= currentPosts.length) {
-                usedIndices = [];
-            }
-
-            // Get random index we haven't used
-            let randomIndex;
-            do {
-                randomIndex = Math.floor(Math.random() * currentPosts.length);
-            } while (usedIndices.includes(randomIndex));
-
-            usedIndices.push(randomIndex);
-            const post = currentPosts[randomIndex];
-
-            document.getElementById('memeContainer').innerHTML = `
-                <h2 class="meme-title">${escapeHtml(post.title)}</h2>
-                <div class="meme-image-wrapper">
-                    <img src="${post.url}" alt="${escapeHtml(post.title)}" class="meme-image" 
-                         onerror="this.parentElement.parentElement.innerHTML='<div class=error>Image failed to load. Click New Meme to try another!</div>'">
-                </div>
-            `;
-            
-            // Preload next memes in background for instant navigation
-            preloadNextMemes(3);
-        }
-
-        function loadNewMeme() {
-            const btn = document.getElementById('newMemeBtn');
-            btn.disabled = true;
-            
-            // Images are preloaded, so display instantly!
-            displayRandomMeme();
-            btn.disabled = false;
-        }
-
-        function visitReddit() {
-            window.open('https://reddit.com/r/raccoonmemes', '_blank', 'noopener');
-        }
-
-        // Secret easter egg: Click the raccoon emoji!
-        document.getElementById('secretRaccoon').addEventListener('click', function() {
-            window.location.href = 'video.html';
-        });
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // Load initial memes on page load
-        loadMemesFromJSON();
-    </script>
+    <footer>dairving.com</footer>
+  </div>
 </body>
 </html>
