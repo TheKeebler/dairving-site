@@ -330,9 +330,6 @@
             <button class="btn-primary" id="newMemeBtn" onclick="loadNewMeme()">
                 🎲 New Meme
             </button>
-            <button class="btn-secondary" id="visitRedditBtn" onclick="visitReddit()">
-                📱 Visit Subreddit
-            </button>
         </div>
     </div>
 
@@ -413,10 +410,6 @@
             btn.disabled = true;
             displayRandomMeme();
             btn.disabled = false;
-        }
-
-        function visitReddit() {
-            window.open('https://reddit.com/r/raccoonmemes', '_blank', 'noopener');
         }
 
         document.getElementById('secretRaccoon').addEventListener('click', function() {
