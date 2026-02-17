@@ -24,6 +24,24 @@
             box-sizing: border-box;
         }
 
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 24px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--moonlight);
+            opacity: 0.4;
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+            z-index: 10;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
         body {
             font-family: 'DM Sans', sans-serif;
             background: linear-gradient(135deg, var(--night-blue) 0%, var(--trash-black) 100%);
@@ -295,10 +313,12 @@
     </style>
 </head>
 <body>
+    <a href="/" class="back-link">← dairving.com</a>
+
     <div class="container">
         <header>
             <h1><span id="secretRaccoon" style="cursor: pointer;" title="🤫">🦝</span> TRASH PANDA MEMES</h1>
-            <p class="subtitle">Handpicked from accross the internet</p>
+            <p class="subtitle">Handpicked from across the internet</p>
         </header>
 
         <div class="meme-container" id="memeContainer">
@@ -318,12 +338,11 @@
     <script>
         let currentPosts = [];
         let usedIndices = [];
-        let preloadedImages = new Map(); // Cache preloaded images
+        let preloadedImages = new Map();
 
-        // Load memes from external JSON file
         async function loadMemesFromJSON() {
             try {
-                const response = await fetch('./memes.json');
+                const response = await fetch('../memes.json');
                 currentPosts = await response.json();
                 displayRandomMeme();
             } catch (error) {
@@ -337,12 +356,10 @@
             }
         }
 
-        // Preload the next N memes in background
         function preloadNextMemes(count = 3) {
             const memesToPreload = [];
             let tempUsedIndices = [...usedIndices];
             
-            // Figure out which memes we'll show next
             for (let i = 0; i < count; i++) {
                 if (tempUsedIndices.length >= currentPosts.length) {
                     tempUsedIndices = [];
@@ -357,7 +374,6 @@
                 memesToPreload.push(currentPosts[randomIndex]);
             }
             
-            // Preload the images
             memesToPreload.forEach(meme => {
                 if (!preloadedImages.has(meme.url)) {
                     const img = new Image();
@@ -368,12 +384,10 @@
         }
 
         function displayRandomMeme() {
-            // If we've shown all memes, reset
             if (usedIndices.length >= currentPosts.length) {
                 usedIndices = [];
             }
 
-            // Get random index we haven't used
             let randomIndex;
             do {
                 randomIndex = Math.floor(Math.random() * currentPosts.length);
@@ -390,15 +404,12 @@
                 </div>
             `;
             
-            // Preload next memes in background for instant navigation
             preloadNextMemes(3);
         }
 
         function loadNewMeme() {
             const btn = document.getElementById('newMemeBtn');
             btn.disabled = true;
-            
-            // Images are preloaded, so display instantly!
             displayRandomMeme();
             btn.disabled = false;
         }
@@ -407,9 +418,8 @@
             window.open('https://reddit.com/r/raccoonmemes', '_blank', 'noopener');
         }
 
-        // Secret easter egg: Click the raccoon emoji!
         document.getElementById('secretRaccoon').addEventListener('click', function() {
-            window.location.href = 'video.html';
+            window.location.href = '../video.html';
         });
 
         function escapeHtml(text) {
@@ -418,7 +428,6 @@
             return div.innerHTML;
         }
 
-        // Load initial memes on page load
         loadMemesFromJSON();
     </script>
 </body>

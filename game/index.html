@@ -9,6 +9,23 @@
   box-sizing: border-box;
 }
 
+.back-link {
+  position: fixed;
+  top: 20px;
+  left: 24px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  opacity: 0.4;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+.back-link:hover {
+  opacity: 1;
+}
+
 body {
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   color: #e2e8f0;
@@ -257,6 +274,7 @@ button:disabled {
 </style>
 </head>
 <body>
+<a href="/" class="back-link">← dairving.com</a>
 <div class="container">
   <h1>🎯 Real or Fake?</h1>
   <div class="subtitle">Can you tell the difference between real cyber headlines and made-up ones?</div>
