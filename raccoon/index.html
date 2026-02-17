@@ -329,9 +329,6 @@
             <button class="btn-primary" id="newMemeBtn" onclick="loadNewMeme()">
                 🎲 New Meme
             </button>
-            <button class="btn-secondary" id="visitRedditBtn" onclick="visitReddit()">
-                📱 Visit Subreddit
-            </button>
         </div>
     </div>
 
@@ -342,7 +339,7 @@
 
         async function loadMemesFromJSON() {
             try {
-                const response = await fetch('./memes.json');
+                const response = await fetch('../memes.json');
                 currentPosts = await response.json();
                 displayRandomMeme();
             } catch (error) {
@@ -414,12 +411,8 @@
             btn.disabled = false;
         }
 
-        function visitReddit() {
-            window.open('https://reddit.com/r/raccoonmemes', '_blank', 'noopener');
-        }
-
         document.getElementById('secretRaccoon').addEventListener('click', function() {
-            window.location.href = './video.html';
+            window.location.href = '../video.html';
         });
 
         function escapeHtml(text) {
