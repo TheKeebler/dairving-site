@@ -342,7 +342,7 @@
 
         async function loadMemesFromJSON() {
             try {
-                const response = await fetch('../memes.json');
+                const response = await fetch('./memes.json');
                 currentPosts = await response.json();
                 displayRandomMeme();
             } catch (error) {
@@ -419,7 +419,7 @@
         }
 
         document.getElementById('secretRaccoon').addEventListener('click', function() {
-            window.location.href = '../video.html';
+            window.location.href = './video.html';
         });
 
         function escapeHtml(text) {
