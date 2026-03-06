@@ -140,6 +140,10 @@
       background: radial-gradient(circle at top left, rgba(0, 217, 163, 0.1), transparent 60%);
     }
 
+    .card-tetris::after {
+      background: radial-gradient(circle at top left, rgba(100, 150, 255, 0.1), transparent 60%);
+    }
+
     .card:hover {
       transform: translateY(-5px);
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
@@ -155,6 +159,10 @@
 
     .card-game:hover {
       border-color: rgba(0, 217, 163, 0.4);
+    }
+
+    .card-tetris:hover {
+      border-color: rgba(100, 150, 255, 0.4);
     }
 
     .card-emoji {
@@ -186,6 +194,7 @@
 
     .card-raccoon .card-arrow { color: var(--accent-orange); }
     .card-game .card-arrow    { color: var(--accent-green); }
+    .card-tetris .card-arrow  { color: #6496ff; }
 
     .card:hover .card-arrow {
       opacity: 1;
@@ -220,10 +229,17 @@
         <div class="card-arrow">Open →</div>
       </a>
 
-      <a class="card card-game" href="game/">
+      <a class="card card-game" href="meme-or-threat/">
         <div class="card-emoji">🎯</div>
         <div class="card-title">Real or Fake?</div>
         <div class="card-desc">Can you spot the real cyber headlines from the made-up ones?</div>
+        <div class="card-arrow">Play →</div>
+      </a>
+
+      <a class="card card-tetris" href="tetris/">
+        <div class="card-emoji">🟦</div>
+        <div class="card-title">Classic Tetris</div>
+        <div class="card-desc">Based on the 1989 NES version.</div>
         <div class="card-arrow">Play →</div>
       </a>
     </div>
