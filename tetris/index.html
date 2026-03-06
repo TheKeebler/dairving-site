@@ -337,6 +337,9 @@
     </style>
 </head>
 <body>
+    <audio id="tetrisMusic" loop>
+  <source src="music/Music - 1.mp3" type="audio/mpeg">
+</audio>
     <a href="/" class="back-link">← Back to Home</a>
     
     <div class="game-container">
@@ -789,5 +792,16 @@
         spawnPiece();
         requestAnimationFrame(gameLoop);
     </script>
+    <script>
+const music = document.getElementById("tetrisMusic");
+
+function startMusic(){
+  music.volume = 0.4;
+  music.play();
+}
+
+document.addEventListener("keydown", startMusic, { once: true });
+document.addEventListener("click", startMusic, { once: true });
+</script>
 </body>
 </html>
