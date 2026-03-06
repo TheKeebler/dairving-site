@@ -225,44 +225,74 @@
 
         @media (max-width: 768px) {
             body {
-                padding: 10px;
+                padding: 0;
+                justify-content: flex-start;
+                min-height: 100vh;
+                height: 100vh;
+                overflow: hidden;
             }
 
             .back-link {
-                font-size: 0.9rem;
-                top: 10px;
-                left: 10px;
+                position: fixed;
+                font-size: 0.8rem;
+                top: 8px;
+                left: 8px;
+                z-index: 200;
             }
 
             .game-container {
-                flex-direction: column;
-                gap: 20px;
-                padding: 15px;
+                flex-direction: row;
+                gap: 8px;
+                padding: 8px;
+                padding-top: 45px;
+                width: 100%;
+                height: 100vh;
+                display: flex;
+                flex-wrap: wrap;
+                align-content: flex-start;
+            }
+
+            .game-container > div:first-child {
+                flex: 0 0 auto;
+                position: relative;
+            }
+
+            canvas#gameCanvas {
+                width: 260px !important;
+                height: 520px !important;
             }
 
             .side-panel {
-                flex-direction: row;
-                flex-wrap: wrap;
-                min-width: unset;
-                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                flex: 1;
+                min-width: 80px;
+                max-width: 120px;
+                justify-content: flex-start;
             }
 
             .panel-section {
-                flex: 1;
-                min-width: 140px;
+                padding: 6px;
+                min-width: unset;
             }
 
             .panel-section h2 {
-                font-size: 1rem;
+                font-size: 0.6rem;
+                margin-bottom: 3px;
+                letter-spacing: 0.5px;
             }
 
             .score-display, .level-display, .lines-display {
-                font-size: 1.5rem;
+                font-size: 1rem;
             }
 
-            #nextPieceCanvas {
-                width: 100px;
-                height: 100px;
+            .panel-section:nth-child(4) {
+                display: none; /* Hide next piece */
+            }
+
+            .panel-section:nth-child(5) {
+                display: none; /* Hide controls panel */
             }
 
             .controls {
@@ -272,13 +302,36 @@
             .mobile-controls {
                 display: flex;
                 flex-direction: column;
+                width: 100%;
+                padding: 8px;
+                gap: 8px;
+                flex-basis: 100%;
+            }
+
+            .paused-overlay {
+                font-size: 1.5rem;
+                padding: 20px 40px;
             }
         }
 
         @media (max-width: 500px) {
             canvas#gameCanvas {
-                width: 240px !important;
-                height: 480px !important;
+                width: 200px !important;
+                height: 400px !important;
+            }
+
+            .mobile-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 1.2rem;
+            }
+
+            .mobile-btn.wide {
+                width: 120px;
+            }
+
+            .score-display, .level-display, .lines-display {
+                font-size: 1.2rem;
             }
         }
     </style>
