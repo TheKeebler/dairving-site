@@ -184,16 +184,107 @@
             z-index: 100;
         }
 
+        .mobile-controls {
+            display: none;
+            margin-top: 20px;
+            gap: 15px;
+        }
+
+        .control-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .mobile-btn {
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: #0ff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.1s;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+        }
+
+        .mobile-btn:active {
+            background: rgba(0, 255, 255, 0.3);
+            transform: scale(0.95);
+        }
+
+        .mobile-btn.wide {
+            width: 150px;
+        }
+
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .back-link {
+                font-size: 0.9rem;
+                top: 10px;
+                left: 10px;
+            }
+
             .game-container {
                 flex-direction: column;
                 gap: 20px;
+                padding: 15px;
+            }
+
+            .side-panel {
+                flex-direction: row;
+                flex-wrap: wrap;
+                min-width: unset;
+                width: 100%;
+            }
+
+            .panel-section {
+                flex: 1;
+                min-width: 140px;
+            }
+
+            .panel-section h2 {
+                font-size: 1rem;
+            }
+
+            .score-display, .level-display, .lines-display {
+                font-size: 1.5rem;
+            }
+
+            #nextPieceCanvas {
+                width: 100px;
+                height: 100px;
+            }
+
+            .controls {
+                display: none;
+            }
+
+            .mobile-controls {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 500px) {
+            canvas#gameCanvas {
+                width: 240px !important;
+                height: 480px !important;
             }
         }
     </style>
 </head>
 <body>
-    <a href="/" class="back-link">← dairving.com</a>
+    <a href="/" class="back-link">← Back to Home</a>
     
     <div class="game-container">
         <div style="position: relative;">
@@ -232,6 +323,20 @@
                     <div><span>P</span><span>Pause</span></div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="mobile-controls">
+        <div class="control-row">
+            <button class="mobile-btn" id="rotateBtn">↻</button>
+        </div>
+        <div class="control-row">
+            <button class="mobile-btn" id="leftBtn">←</button>
+            <button class="mobile-btn" id="downBtn">↓</button>
+            <button class="mobile-btn" id="rightBtn">→</button>
+        </div>
+        <div class="control-row">
+            <button class="mobile-btn wide" id="dropBtn">DROP</button>
         </div>
     </div>
 
@@ -559,7 +664,75 @@
             }
         });
 
+        // Mobile touch controls
+        function setupMobileControls() {
+            const leftBtn = document.getElementById('leftBtn');
+            const rightBtn = document.getElementById('rightBtn');
+            const downBtn = document.getElementById('downBtn');
+            const rotateBtn = document.getElementById('rotateBtn');
+            const dropBtn = document.getElementById('dropBtn');
+
+            leftBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (!gameOver && !paused) movePiece(-1);
+            });
+
+            rightBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (!gameOver && !paused) movePiece(1);
+            });
+
+            downBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (!gameOver && !paused) {
+                    if (dropPiece()) {
+                        score += 1;
+                        updateScore();
+                    }
+                    dropCounter = 0;
+                }
+            });
+
+            rotateBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (!gameOver && !paused) currentPiece.rotate();
+            });
+
+            dropBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (!gameOver && !paused) hardDrop();
+            });
+
+            // Also support mouse clicks for testing
+            leftBtn.addEventListener('click', () => {
+                if (!gameOver && !paused) movePiece(-1);
+            });
+
+            rightBtn.addEventListener('click', () => {
+                if (!gameOver && !paused) movePiece(1);
+            });
+
+            downBtn.addEventListener('click', () => {
+                if (!gameOver && !paused) {
+                    if (dropPiece()) {
+                        score += 1;
+                        updateScore();
+                    }
+                    dropCounter = 0;
+                }
+            });
+
+            rotateBtn.addEventListener('click', () => {
+                if (!gameOver && !paused) currentPiece.rotate();
+            });
+
+            dropBtn.addEventListener('click', () => {
+                if (!gameOver && !paused) hardDrop();
+            });
+        }
+
         // Start the game
+        setupMobileControls();
         spawnPiece();
         requestAnimationFrame(gameLoop);
     </script>
