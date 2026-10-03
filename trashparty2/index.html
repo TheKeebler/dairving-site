@@ -338,36 +338,53 @@
   });
 
   let map = null;
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  async function lookup(url) {
+    const r = await fetch(url);
+    const j = await r.json();
+    return j.length ? [parseFloat(j[0].lat), parseFloat(j[0].lon)] : null;
+  }
   async function geocode(s) {
     if (typeof s.lat === "number") return [s.lat, s.lng];
     let cache = {};
     try { cache = JSON.parse(localStorage.getItem("tp-geo") || "{}"); } catch (e) {}
     const key = s.line + ", " + s.city;
     if (cache[key]) return cache[key];
-    const r = await fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=us&q=" + encodeURIComponent(key));
-    const j = await r.json();
-    if (!j.length) return null;
-    const pt = [parseFloat(j[0].lat), parseFloat(j[0].lon)];
-    cache[key] = pt;
-    try { localStorage.setItem("tp-geo", JSON.stringify(cache)); } catch (e) {}
+    const base = "https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=us&";
+    const zip = (s.city.match(/\d{5}/) || [""])[0];
+    const tries = [
+      base + "q=" + encodeURIComponent(key),
+      base + "q=" + encodeURIComponent(s.line + ", Columbus, Ohio"),
+      base + "street=" + encodeURIComponent(s.line) + "&city=Columbus&state=Ohio&postalcode=" + zip
+    ];
+    let pt = null;
+    for (const u of tries) {
+      await wait(1100);
+      try { pt = await lookup(u); } catch (e) {}
+      if (pt) break;
+    }
+    if (pt) {
+      cache[key] = pt;
+      try { localStorage.setItem("tp-geo", JSON.stringify(cache)); } catch (e) {}
+    }
     return pt;
   }
   (async function () {
     if (!window.L) { msg.textContent = "The map could not load. The cleanup sites are listed next to it."; return; }
     map = L.map("map", { scrollWheelZoom: false }).setView([39.9612, -82.9988], 11);
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "&copy; OpenStreetMap contributors" }).addTo(map);
-    const pts = [];
+    const pts = [], missed = [];
     for (let i = 0; i < SITES.length; i++) {
       try {
         const pt = await geocode(SITES[i]);
-        if (!pt) continue;
+        if (!pt) { missed.push(SITES[i].line); continue; }
         const icon = L.divIcon({ className: "pin", html: "<span></span>", iconSize: [22, 22], iconAnchor: [11, 11], popupAnchor: [0, -12] });
         const m = L.marker(pt, { icon, title: SITES[i].line }).addTo(map).bindPopup("<strong>" + SITES[i].line + "</strong><br>" + SITES[i].city);
         markers[i] = m; pts.push(pt);
-      } catch (e) {}
+      } catch (e) { missed.push(SITES[i].line); }
     }
     if (pts.length) map.fitBounds(pts, { padding: [40, 40], maxZoom: 14 });
-    if (pts.length < SITES.length) msg.textContent = "Some pins could not be placed. Every site is still listed with a link to Maps.";
+    if (missed.length) msg.textContent = "Could not place: " + missed.join(", ") + ". Every site is still listed with a link to Maps.";
   })();
 
   // ---- demo sign-up (nothing is sent) ----
