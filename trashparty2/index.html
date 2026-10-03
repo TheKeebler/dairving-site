@@ -69,7 +69,7 @@
   .ticket .where { margin: 0 0 1.5rem; }
 
   .stats { background: var(--sage); padding: 2.5rem 0; }
-  .stats .row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+  .stats .row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
   .stat .num { font-family: var(--display); font-weight: 800; font-size: clamp(2.5rem, 6vw, 4rem); line-height: 1; color: var(--forest); letter-spacing: -0.02em; }
   .stat .cap { margin: 0.35rem 0 0; color: var(--muted); }
 
@@ -158,7 +158,7 @@
     <div class="wrap grid">
       <div>
         <h1>Clean streets, one block at a time.</h1>
-        <p class="lede">We pick up litter in Columbus neighborhoods. We provide the gloves. You just show up.</p>
+        <p class="lede">We pick up litter in Columbus neighborhoods. You just show up.</p>
         <div class="btn-row">
           <a class="btn sun" href="#signup">Join a cleanup</a>
           <a class="btn line" href="#map-section">See where we have cleaned</a>
@@ -172,7 +172,6 @@
     <div class="wrap row">
       <div class="stat"><div class="num"><span id="lbs" data-to="156000">156,000</span></div><p class="cap">pounds of trash picked up</p></div>
       <div class="stat"><div class="num"><span id="sitecount">4</span></div><p class="cap">cleanup sites on the map below</p></div>
-      <div class="stat"><div class="num">Gloves</div><p class="cap">provided by us, so bring yourself</p></div>
     </div>
   </div>
 </main>
@@ -194,7 +193,7 @@
 <section class="tint" id="events">
   <div class="wrap">
     <h2>Upcoming cleanups</h2>
-    <p class="sub">Bring water and closed-toe shoes. We provide the gloves. Exact meeting spots are emailed to everyone who signs up.</p>
+    <p class="sub">Bring water and closed-toe shoes. Exact meeting spots are emailed to everyone who signs up.</p>
     <ul class="events" id="event-list"></ul>
     <div class="cal-all btn-row"><button class="btn ghost" type="button" id="cal-all">Add all events to my calendar</button></div>
     <p class="fine">The real site could offer a calendar link that updates itself, so new events show up in people's calendars without them doing anything.</p>
@@ -247,7 +246,8 @@
     { line: "2626 Cleveland Ave", city: "Columbus, OH 43211" },
     { line: "30 South Yale Ave", city: "Columbus, OH 43222" },
     { line: "1775 W Broad St", city: "Columbus, OH 43223" },
-    { line: "275 S Wilson Rd", city: "Columbus, OH 43228" }
+    { line: "275 S Wilson Rd", city: "Columbus, OH 43228" },
+    { line: "3988 Indianola Ave", city: "Columbus, OH 43214" }
   ];
   // start/end use a UTC offset: -04:00 is Eastern daylight time, -05:00 is Eastern standard time.
   const EVENTS = [
