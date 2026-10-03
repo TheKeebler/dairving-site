@@ -79,16 +79,9 @@
   .sub { color: var(--muted); max-width: 38rem; margin: 0 0 1.75rem; }
   .fine { font-size: 0.95rem; color: var(--muted); }
 
-  .mapgrid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem; align-items: start; }
-  #map { height: 26rem; border-radius: 1rem; background: var(--sage); border: 2px solid var(--forest); z-index: 0; }
+  #map { height: 32rem; border-radius: 1rem; background: var(--sage); border: 2px solid var(--forest); z-index: 0; }
   .pin span { display: block; width: 1.4rem; height: 1.4rem; background: var(--forest); border: 3px solid #fff; border-radius: 50%; box-shadow: 0 0 0 2px var(--forest); }
   .pin.on span { background: var(--sun); box-shadow: 0 0 0 2px var(--forest-dark); }
-  .sites { list-style: none; margin: 0; padding: 0; }
-  .sites li { background: #fff; border: 2px solid var(--sage-line); border-radius: 0.75rem; padding: 0.9rem 1rem; margin-bottom: 0.75rem; }
-  .sites .addr { font-weight: 700; margin: 0; }
-  .sites .city { margin: 0 0 0.5rem; color: var(--muted); font-size: 0.95rem; }
-  .sites .acts { display: flex; gap: 1rem; flex-wrap: wrap; }
-  .sites button, .sites a { font: inherit; font-weight: 700; color: var(--forest); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
   #map-msg { margin: 0.75rem 0 0; }
 
   .events { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
@@ -119,12 +112,12 @@
   footer p { margin: 0 0 0.5rem; max-width: 28rem; }
 
   @media (max-width: 52rem) {
-    .hero .grid, .mapgrid, .signup { grid-template-columns: 1fr; }
+    .hero .grid, .signup { grid-template-columns: 1fr; }
     .hero { padding: 3rem 0; }
     .ticket { transform: none; }
     .stats .row { grid-template-columns: 1fr; }
     .events li { grid-template-columns: 1fr; }
-    #map { height: 20rem; }
+    #map { height: 24rem; }
   }
   @media (hover: hover) {
     .ticket:hover, .ticket:focus-within { transform: rotate(0deg) translateY(-6px) scale(1.02); box-shadow: 0 18px 30px rgba(0, 0, 0, 0.35); }
@@ -179,14 +172,9 @@
 <section id="map-section">
   <div class="wrap">
     <h2>Where we have cleaned</h2>
-    <p class="sub">Every pin is a place Trash Party has shown up. Pick one from the list to find it on the map.</p>
-    <div class="mapgrid">
-      <div>
-        <div id="map" role="region" aria-label="Map of cleanup sites"></div>
-        <p class="fine" id="map-msg"></p>
-      </div>
-      <ul class="sites" id="sites"></ul>
-    </div>
+    <p class="sub">Every pin is a place Trash Party has shown up. Tap a pin to see the address.</p>
+    <div id="map" role="region" aria-label="Map of cleanup sites"></div>
+    <p class="fine" id="map-msg"></p>
   </div>
 </section>
 
@@ -243,11 +231,11 @@
   // Add more cleanup sites here. lat and lng are optional. If you leave them out, the page looks the
   // address up when it loads. Once you know the coordinates, paste them in so the pins load instantly.
   const SITES = [
-    { line: "2626 Cleveland Ave", city: "Columbus, OH 43211" },
-    { line: "30 South Yale Ave", city: "Columbus, OH 43222" },
-    { line: "1775 W Broad St", city: "Columbus, OH 43223" },
-    { line: "275 S Wilson Rd", city: "Columbus, OH 43228" },
-    { line: "3988 Indianola Ave", city: "Columbus, OH 43214" }
+    { line: "2626 Cleveland Ave", city: "Columbus, OH 43211", lat: 40.02170598765815, lng: -82.96369336065911 },
+    { line: "30 South Yale Ave", city: "Columbus, OH 43222", lat: 39.95787167151711, lng: -83.03151364531641 },
+    { line: "1775 W Broad St", city: "Columbus, OH 43223", lat: 39.955329723240894, lng: -83.04556470113457 },
+    { line: "275 S Wilson Rd", city: "Columbus, OH 43228", lat: 39.95088234554504, lng: -83.0952043741531 },
+    { line: "3988 Indianola Ave", city: "Columbus, OH 43214", lat: 40.045858831778034, lng: -82.99949487414885 }
   ];
   // start/end use a UTC offset: -04:00 is Eastern daylight time, -05:00 is Eastern standard time.
   const EVENTS = [
@@ -320,22 +308,9 @@
 
   // ---- map of cleanup sites ----
   document.getElementById("sitecount").textContent = SITES.length;
-  const sitesEl = document.getElementById("sites");
   const msg = document.getElementById("map-msg");
   const markers = [];
   const mapsUrl = s => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(s.line + ", " + s.city);
-
-  SITES.forEach((s, i) => {
-    const li = document.createElement("li");
-    li.innerHTML = '<p class="addr">' + s.line + '</p><p class="city">' + s.city + '</p><div class="acts"><button type="button">Show on map</button><a href="' + mapsUrl(s) + '">Open in Maps</a></div>';
-    li.querySelector("button").addEventListener("click", () => {
-      document.getElementById("map").scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" });
-      const m = markers[i];
-      if (m) { map.flyTo(m.getLatLng(), 15, { animate: !reduce }); m.openPopup(); }
-      else msg.textContent = "That pin isn't on the map yet. Use Open in Maps for now.";
-    });
-    sitesEl.appendChild(li);
-  });
 
   let map = null;
   const wait = ms => new Promise(r => setTimeout(r, ms));
@@ -370,7 +345,7 @@
     return pt;
   }
   (async function () {
-    if (!window.L) { msg.textContent = "The map could not load. The cleanup sites are listed next to it."; return; }
+    if (!window.L) { msg.textContent = "The map could not load. Try refreshing the page."; return; }
     map = L.map("map", { scrollWheelZoom: false }).setView([39.9612, -82.9988], 11);
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "&copy; OpenStreetMap contributors" }).addTo(map);
     const pts = [], missed = [];
@@ -379,12 +354,12 @@
         const pt = await geocode(SITES[i]);
         if (!pt) { missed.push(SITES[i].line); continue; }
         const icon = L.divIcon({ className: "pin", html: "<span></span>", iconSize: [22, 22], iconAnchor: [11, 11], popupAnchor: [0, -12] });
-        const m = L.marker(pt, { icon, title: SITES[i].line }).addTo(map).bindPopup("<strong>" + SITES[i].line + "</strong><br>" + SITES[i].city);
+        const m = L.marker(pt, { icon, title: SITES[i].line }).addTo(map).bindPopup("<strong>" + SITES[i].line + "</strong><br>" + SITES[i].city + '<br><a href="' + mapsUrl(SITES[i]) + '">Open in Maps</a>');
         markers[i] = m; pts.push(pt);
       } catch (e) { missed.push(SITES[i].line); }
     }
     if (pts.length) map.fitBounds(pts, { padding: [40, 40], maxZoom: 14 });
-    if (missed.length) msg.textContent = "Could not place: " + missed.join(", ") + ". Every site is still listed with a link to Maps.";
+    if (missed.length) msg.textContent = "Could not place: " + missed.join(", ") + ".";
   })();
 
   // ---- demo sign-up (nothing is sent) ----
