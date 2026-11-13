@@ -144,6 +144,10 @@
       background: radial-gradient(circle at top left, rgba(100, 150, 255, 0.1), transparent 60%);
     }
 
+    .card-attic::after {
+      background: radial-gradient(circle at top left, rgba(200, 162, 122, 0.12), transparent 60%);
+    }
+
     .card:hover {
       transform: translateY(-5px);
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
@@ -163,6 +167,10 @@
 
     .card-tetris:hover {
       border-color: rgba(100, 150, 255, 0.4);
+    }
+
+    .card-attic:hover {
+      border-color: rgba(200, 162, 122, 0.45);
     }
 
     .card-emoji {
@@ -195,6 +203,7 @@
     .card-raccoon .card-arrow { color: var(--accent-orange); }
     .card-game .card-arrow    { color: var(--accent-green); }
     .card-tetris .card-arrow  { color: #6496ff; }
+    .card-attic .card-arrow   { color: #c8a27a; }
 
     .card:hover .card-arrow {
       opacity: 1;
@@ -241,6 +250,13 @@
         <div class="card-title">Classic Tetris</div>
         <div class="card-desc">Based on the 1989 NES version.</div>
         <div class="card-arrow">Play →</div>
+      </a>
+
+      <a class="card card-attic" href="attic/">
+        <div class="card-emoji">🏠</div>
+        <div class="card-title">Attic Planner</div>
+        <div class="card-desc">A 3D render of the attic. Drag furniture around to see what fits.</div>
+        <div class="card-arrow">Open →</div>
       </a>
     </div>
   </div>
