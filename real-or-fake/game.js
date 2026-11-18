@@ -21,7 +21,7 @@ const HEADLINES = [
   {
     name: "Don't Feed Them", age: "2026", art: "hood", color: "#4B3F72", real: true,
     headline: "Please Don't Feed the Scattered Lapsus ShinyHunters",
-    chips: ["Extortion", "Threat actors"],
+    chips: ["Extortion", "Threat actors", "Data theft"],
     note: "A real Krebs on Security story about the extortion crew made up of members tied to Scattered Spider, Lapsus$, and ShinyHunters.",
     message: "Real. Krebs named me, not my mom.",
     source: { label: "Krebs on Security, 2026", url: "https://krebsonsecurity.com/2026/02/please-dont-feed-the-scattered-lapsus-shiny-hunters/" }
@@ -37,14 +37,14 @@ const HEADLINES = [
   {
     name: "Operation Cupcake", age: "2011", art: "cupcake", color: "#E07A9B", real: true,
     headline: "MI6 hits al-Qaida in 'Operation Cupcake'",
-    chips: ["Intelligence", "Defacement"],
+    chips: ["Intelligence", "Defacement", "Counterterrorism"],
     note: "British intelligence swapped the bomb-making pages of an online al-Qaida magazine for cupcake recipes.",
     message: "Real. I was delicious and counterterrorism.",
     source: { label: "UPI, 2011", url: "https://www.upi.com/Top_News/World-News/2011/06/03/MI6-hits-al-Qaida-in-Operation-Cupcake/86971307102683/" }
   },
   {
     name: "Anna-Senpai", age: "2017", art: "worm", color: "#3E5C76", real: true,
-    headline: "Who is Anna-Senpai, the Mirai Worm Author?",
+    headline: "Who is Anna-Senpai, the Mirai worm author?",
     chips: ["Botnets", "IoT", "Investigation"],
     note: "Brian Krebs dug into who was behind the alias that leaked the source code for the Mirai IoT botnet.",
     message: "Real. That alias did not stay anonymous.",
@@ -53,7 +53,7 @@ const HEADLINES = [
   {
     name: "Rude Robovac", age: "2024", art: "vacuum", color: "#2E8B7A", real: true,
     headline: "Robot vacuums hacked to shout slurs at their owners",
-    chips: ["Smart home", "IoT"],
+    chips: ["Smart home", "IoT", "Hijacking"],
     note: "Attackers took over Ecovacs robot vacuums in several US cities and used their speakers to yell at people in their own homes.",
     message: "Real. I just wanted to clean.",
     source: { label: "Vice, 2024", url: "https://www.vice.com/en/article/ecovacs-robot-vacuums-hacked-slurs/" }
@@ -61,7 +61,7 @@ const HEADLINES = [
   {
     name: "Bad Hire", age: "2024", art: "badge", color: "#5A6B8C", real: true,
     headline: "KnowBe4, a security training company, accidentally hired a North Korean hacker as a Principal Software Engineer",
-    chips: ["Insider threat", "Hiring"],
+    chips: ["Insider threat", "Hiring", "North Korea"],
     note: "The company caught its new remote hire, a North Korean operative using a stolen identity, when he tried to load malware on his work laptop.",
     message: "Real. Onboarding went badly.",
     source: { label: "KnowBe4 blog, 2024", url: "https://blog.knowbe4.com/how-a-north-korean-fake-it-worker-tried-to-infiltrate-us" }
@@ -69,7 +69,7 @@ const HEADLINES = [
   {
     name: "Doom Tractor", age: "2022", art: "tractor", color: "#3E7D3A", real: true,
     headline: "Hacker jailbreaks John Deere tractor live on stage at DEF CON, then runs Doom on it",
-    chips: ["Right to repair", "DEF CON"],
+    chips: ["Right to repair", "DEF CON", "Jailbreak"],
     note: "A researcher known as Sick Codes jailbroke a John Deere tractor display at DEF CON 2022 and got Doom running on it.",
     message: "Real. I plow and I frag.",
     source: { label: "The Register, 2022", url: "https://www.theregister.com/2022/08/16/john_deere_doom" }
@@ -77,7 +77,7 @@ const HEADLINES = [
   {
     name: "Thunderstruck", age: "2012", art: "music", color: "#B8452B", real: true,
     headline: "Iranian nuclear facility computers blast AC/DC's 'Thunderstruck' during a cyberattack",
-    chips: ["Iran", "Malware", "Unconfirmed"],
+    chips: ["Iran", "Malware", "Nuclear"],
     note: "This was really reported in 2012, based on an email from an unnamed Iranian scientist. It was never confirmed, and despite how it's often told, it wasn't Stuxnet.",
     message: "Real report, shaky details. Still a banger.",
     source: { label: "iTnews, 2012", url: "https://www.itnews.com.au/news/ac-dc-song-used-in-iranian-nuclear-program-attack-309852" }
@@ -109,72 +109,72 @@ const HEADLINES = [
 
   /* ---------- FAKE ---------- */
   {
-    name: "Leaky Speaker", age: "", art: "speaker", color: "#3D7CC9", real: false,
+    name: "Leaky Speaker", age: "2019", art: "speaker", color: "#3D7CC9", real: false,
     headline: "Hackers use Alexa to leak classified cookbook recipes",
-    chips: ["Smart speakers", "Cooking"],
+    chips: ["Smart speakers", "Data leak", "Cooking"],
     note: "Smart speakers have had real privacy scares, but nobody has leaked a secret cookbook through one.",
     message: "Made up. My recipes stay secret."
   },
   {
-    name: "Ramen Worm", age: "", art: "bowl", color: "#D98A2B", real: false,
+    name: "Ramen Worm", age: "2017", art: "bowl", color: "#D98A2B", real: false,
     headline: "Who is ByteNoodle, the author of the 'Instant Ramen Worm'?",
-    chips: ["Malware", "Investigation"],
+    chips: ["Malware", "Investigation", "Worms"],
     note: "It copies the style of real investigative headlines, but ByteNoodle and the ramen worm don't exist.",
     message: "Made up. Ready in three minutes, though."
   },
   {
-    name: "Emoji Lockout", age: "", art: "sofa", color: "#2B5DA8", real: false,
+    name: "Emoji Lockout", age: "2023", art: "sofa", color: "#2B5DA8", real: false,
     headline: "Ransomware hits IKEA, locks smart furniture with emoji passwords",
-    chips: ["Ransomware", "Retail"],
+    chips: ["Ransomware", "Retail", "Smart home"],
     note: "There's no ransomware strain that locks your bookshelf behind an emoji password.",
     message: "Made up. Some assembly required."
   },
   {
-    name: "Crypto Espresso", age: "", art: "cup", color: "#6B4A35", real: false,
+    name: "Crypto Espresso", age: "2018", art: "cup", color: "#6B4A35", real: false,
     headline: "Hackers exploit espresso machines to mine Monero cryptocurrency",
-    chips: ["Cryptomining", "IoT"],
+    chips: ["Cryptomining", "IoT", "Coffee"],
     note: "Cryptominers do turn up on odd devices, which is what makes this one tricky, but this story is made up.",
     message: "Made up. Just a double shot."
   },
   {
-    name: "Pickle Spider", age: "", art: "spider", color: "#6E9E2F", real: false,
+    name: "Pickle Spider", age: "2025", art: "spider", color: "#6E9E2F", real: false,
     headline: "Tangerine Mongoose and Pickle Spider announced joint operation targeting Western financial institutions",
-    chips: ["Threat actors", "Finance"],
+    chips: ["Threat actors", "Finance", "APT"],
     note: "Threat intel firms really do give groups names like this, which is why it sounds believable. These two are invented.",
     message: "Made up. Tangerine Mongoose isn't real either."
   },
   {
-    name: "Fridge Ransom", age: "", art: "fridge", color: "#5B6CC9", real: false,
+    name: "Fridge Ransom", age: "2016", art: "fridge", color: "#5B6CC9", real: false,
     headline: "Ransomware group demands Bitcoin to unlock Wi-Fi enabled fridges",
-    chips: ["Ransomware", "Smart home"],
+    chips: ["Ransomware", "Smart home", "Bitcoin"],
     note: "Researchers have shown smart fridges can be hacked, but there was no wave of fridge ransom attacks.",
     message: "Made up. Your leftovers are safe."
   },
   {
-    name: "Toaster Botnet", age: "", art: "toaster", color: "#8E3FB8", real: false,
+    name: "Toaster Botnet", age: "2017", art: "toaster", color: "#8E3FB8", real: false,
     headline: "Smart toaster botnet knocks a regional bank offline for six hours",
     chips: ["Banking", "IoT", "6 hours down"],
     note: "IoT botnets are very real (Mirai ran on cameras and DVRs), but no army of toasters has taken down a bank.",
     message: "Made up. I can barely make toast."
   },
   {
-    name: "Miles Ransom", age: "", art: "plane", color: "#E08A1E", real: false,
+    name: "Miles Ransom", age: "2022", art: "plane", color: "#E08A1E", real: false,
     headline: "Hackers demand a ransom paid entirely in airline miles",
-    chips: ["Ransomware", "Travel"],
+    chips: ["Ransomware", "Travel", "Airlines"],
     note: "Ransomware crews want money that's hard to trace, which is why they ask for crypto. Airline miles could be frozen in minutes.",
     message: "Made up. Nobody wants a ransom with blackout dates."
   },
   {
-    name: "Gossip Fridge", age: "", art: "fridge", color: "#7A5BC9", real: false,
+    name: "Gossip Fridge", age: "2020", art: "fridge", color: "#7A5BC9", real: false,
     headline: "Smart fridge emails a CEO's grocery list to a competitor",
-    chips: ["Smart home", "Corporate"],
+    chips: ["Smart home", "Corporate", "Data leak"],
     note: "Smart appliances have leaked data before, but none has tattled to a rival company.",
     message: "Made up. I keep secrets cold."
   },
   {
-    name: "Loyalty Program", age: "", art: "card", color: "#B23A7A", real: false,
+    name: "Loyalty Program", age: "2024", art: "card", color: "#B23A7A", real: false,
     headline: "Ransomware gang launches a loyalty program for repeat victims",
-    chips: ["Ransomware"],
+    chips: ["Ransomware", "Extortion", "Victims"],
     note: "Some gangs do run surprisingly polished support desks, but there's no punch card for getting hacked twice.",
     message: "Made up. Tenth hack is not free."
   }
