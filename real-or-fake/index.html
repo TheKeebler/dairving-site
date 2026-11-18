@@ -55,11 +55,6 @@
     <h1 class="sr-only">Real or Fake? Cyber headlines</h1>
 
     <div id="game" class="game">
-      <div class="banner" id="banner" role="status" aria-live="polite" hidden>
-        <span class="banner-title" id="bannerTitle"></span>
-        <span class="banner-text" id="bannerText"></span>
-      </div>
-
       <div class="deck">
         <div class="deck-back" aria-hidden="true"></div>
         <article class="card" id="card" aria-roledescription="headline card">
@@ -73,28 +68,35 @@
             <p class="card-headline" id="cardHeadline"></p>
             <div class="chips" id="cardChips"></div>
           </div>
+          <div class="reveal" id="banner" role="status" aria-live="polite" hidden>
+            <span class="reveal-pill" id="bannerTitle"></span>
+            <p class="reveal-text" id="bannerText"></p>
+          </div>
         </article>
       </div>
 
-      <div class="controls" id="controls">
-        <div class="control">
-          <button class="round-btn fake" id="btnFake" aria-label="Fake (swipe left)">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
-          </button>
-          <span class="control-label">Fake</span>
+      <div class="actions">
+        <div class="controls-wrap" id="controlsWrap">
+          <div class="controls" id="controls">
+            <div class="control">
+              <button class="round-btn fake" id="btnFake" aria-label="Fake (swipe left)">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+              </button>
+              <span class="control-label">Fake</span>
+            </div>
+            <div class="control">
+              <button class="round-btn real" id="btnReal" aria-label="Real (swipe right)">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.5-9.2C1 8.3 3.3 5 6.7 5c2 0 3.6 1.1 4.3 2.6h2C13.7 6.1 15.3 5 17.3 5 20.7 5 23 8.3 21.5 11.8 19.5 16.4 12 21 12 21z"/></svg>
+              </button>
+              <span class="control-label">Real</span>
+            </div>
+          </div>
+          <p class="hint" id="hint">Swipe right if it happened, left if it's made up.</p>
         </div>
-        <div class="control">
-          <button class="round-btn real" id="btnReal" aria-label="Real (swipe right)">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.5-9.2C1 8.3 3.3 5 6.7 5c2 0 3.6 1.1 4.3 2.6h2C13.7 6.1 15.3 5 17.3 5 20.7 5 23 8.3 21.5 11.8 19.5 16.4 12 21 12 21z"/></svg>
-          </button>
-          <span class="control-label">Real</span>
+        <div class="after" id="after" hidden>
+          <a class="pill ghost" id="btnSource" href="#" target="_blank" rel="noopener noreferrer">Read the story</a>
+          <button class="pill primary" id="btnNext">Keep swiping</button>
         </div>
-      </div>
-      <p class="hint" id="hint">Swipe right if it happened, left if it's made up.</p>
-
-      <div class="after" id="after" hidden>
-        <a class="pill ghost" id="btnSource" href="#" target="_blank" rel="noopener noreferrer">Read the story</a>
-        <button class="pill primary" id="btnNext">Keep swiping</button>
       </div>
     </div>
 
