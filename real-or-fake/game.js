@@ -232,6 +232,7 @@ function start() {
   idx = 0; answers = []; streak = 0; locked = false;
   $("results").hidden = true;
   $("game").style.display = "";
+  document.body.classList.remove("results-mode");
   renderCard();
   renderSidebar();
   renderStats();
@@ -243,7 +244,7 @@ function renderCard() {
   const h = current();
   const card = $("card");
   card.style.transition = "none";
-  card.style.transform = "translateY(16px) scale(0.97)";
+  card.style.transform = "scale(0.96)";
   card.style.opacity = "0";
   card.classList.remove("locked");
 
@@ -260,8 +261,7 @@ function renderCard() {
   card.setAttribute("aria-label", "Headline " + (idx + 1) + " of " + deck.length + ": " + h.headline);
 
   $("banner").hidden = true;
-  $("controls").hidden = false;
-  $("hint").hidden = false;
+  $("controlsWrap").hidden = false;
   $("after").hidden = true;
 
   requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -281,20 +281,19 @@ function guess(saidReal) {
 
   const card = $("card");
   card.classList.add("locked");
-  card.style.transform = saidReal ? "rotate(4deg) translateX(24px)" : "rotate(-4deg) translateX(-24px)";
+  card.style.transform = saidReal ? "rotate(2deg)" : "rotate(-2deg)";
   $("stampReal").style.opacity = h.real ? 1 : 0;
   $("stampFake").style.opacity = h.real ? 0 : 1;
 
-  $("banner").className = "banner " + (correct ? "win" : "lose");
-  $("bannerTitle").textContent = (correct ? "You called it! " : "It got you. ") + (h.real ? "This one's real." : "This one's fake.");
+  $("banner").className = "reveal " + (correct ? "win" : "lose");
+  $("bannerTitle").textContent = (correct ? "You called it. " : "It got you. ") + (h.real ? "It's real." : "It's fake.");
   $("bannerText").textContent = h.note;
   $("banner").hidden = false;
 
-  $("controls").hidden = true;
-  $("hint").hidden = true;
+  $("controlsWrap").hidden = true;
   $("after").hidden = false;
   const src = $("btnSource");
-  if (h.real && h.source) { src.hidden = false; src.href = h.source.url; src.textContent = "Read the story (" + h.source.label + ")"; }
+  if (h.real && h.source) { src.hidden = false; src.href = h.source.url; src.textContent = "Read the story"; src.title = h.source.label; src.setAttribute("aria-label", "Read the story (" + h.source.label + ")"); }
   else { src.hidden = true; }
   $("btnNext").textContent = idx === deck.length - 1 ? "See results" : "Keep swiping";
   $("btnNext").focus({ preventScroll: true });
@@ -352,6 +351,7 @@ function showResults() {
 
   $("game").style.display = "none";
   $("results").hidden = false;
+  document.body.classList.add("results-mode");
   $("rScore").textContent = right;
   $("rTotal").textContent = total;
   const pct = total ? right / total : 0;
@@ -422,8 +422,7 @@ function toast(msg) {
   card.addEventListener("pointermove", (e) => {
     if (!dragging || e.pointerId !== pointerId) return;
     dx = e.clientX - startX;
-    const dy = (e.clientY - startY) * 0.15;
-    card.style.transform = "translate(" + dx + "px," + dy + "px) rotate(" + (dx / 18) + "deg)";
+    card.style.transform = "translateX(" + dx + "px) rotate(" + (dx / 18) + "deg)";
     const p = Math.min(Math.abs(dx) / THRESHOLD, 1);
     $("stampReal").style.opacity = dx > 0 ? p : 0;
     $("stampFake").style.opacity = dx < 0 ? p : 0;
