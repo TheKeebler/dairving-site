@@ -29,6 +29,9 @@ label{display:inline-flex;gap:4px;align-items:center;white-space:nowrap}
 #pad button{min-width:34px;padding:5px 8px}
 #wbar{left:12px;top:12px;max-width:calc(100% - 24px)}
 #hr.low{color:#c0392b;font-weight:600}
+#fit{left:12px;bottom:12px;width:min(330px,calc(100% - 24px));display:block}
+#fit .fr{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px}
+#fo{margin-top:8px;font-size:13px}#fo.ok b{color:#2d7a4f}#fo.no b{color:#c0392b}
 #help{right:12px;top:12px;width:min(340px,calc(100% - 24px));display:block;font-size:13px;max-height:calc(100% - 90px);overflow:auto}
 #help h4{margin:8px 0 2px;font-size:13px}#help h4:first-child{margin-top:0}
 #help p{margin:0}

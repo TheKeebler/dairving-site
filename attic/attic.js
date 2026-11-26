@@ -5,6 +5,7 @@ ctr=new T.Vector3(W/2,40,L/2);
 ren.setPixelRatio(Math.min(devicePixelRatio,2));el.appendChild(ren.domElement);
 sc.add(new T.HemisphereLight(0xffffff,0x8a8274,.9));
 const dl=new T.DirectionalLight(0xffffff,.4);dl.position.set(40,300,120);sc.add(dl);
+function gl0(){return new T.MeshBasicMaterial({color:0xffcf8a})}
 // shell: faces point outward and render from inside, so near walls vanish when orbiting
 function quad(p,c,t){let v=p.map(a=>new T.Vector3(...a));
  const n=new T.Vector3().subVectors(v[1],v[0]).cross(new T.Vector3().subVectors(v[2],v[0])),
@@ -34,7 +35,29 @@ const CZ=HB+97,SZ=CZ+53.5,SX=BW+39.25,SH=KH+(CH-KH)*(W-SX)/RUN,
 ext([[BW,0],[W,0],[W,KH],[W-RUN,CH],[BW,CH]],HB,97,0x784a29);
 ext([[SX,0],[W,0],[W,KH],[SX,SH]],CZ,53.5,0xe4e6e8);
 box(4.75,33.5,53.5,BW+2.4,16.75,CZ+26.75,0x784a29);
-box(SX-BW-4.75,.4,53.5,(BW+4.75+SX)/2,.2,CZ+26.75,0x15130f);
+// stairs down to the second floor: 12 risers of 9 in, 11 treads of 9.5 in, 36 in wall to wall,
+// handrail on the left going up (33 in to the far wall), 29 x 80 in door 6 in before the first step
+const n0=sc.children.length,SR=9,ST=9.5,NT=11,LOW=-SR*(NT+1),SW=36,SXC=(BW+4.75+SX)/2,SX0=SXC-SW/2,SX1=SXC+SW/2,Z1=SZ-NT*ST,DZ=Z1-6,
+ DW=29,DH=80,RW=33,BOXY=LOW+SR+122,LCH=LOW+96,TH=Math.atan(SR/ST),
+ nose=z=>LOW+SR+(z-Z1)*SR/ST,
+ PH=(LOW+DH-nose(DZ))*Math.cos(TH),PB=(BOXY-nose(CZ))*Math.cos(TH),PERP=Math.min(PH,PB);
+for(let k=1;k<=NT;k++){box(SW,SR*k,ST,SXC,LOW+SR*k/2,Z1+ST*(k-.5),0x8b6f5e);box(SW,.6,1.2,SXC,LOW+SR*k-.3,Z1+ST*(k-1)+.6,0x6f5446)}
+[SX0-.5,SX1+.5].forEach(x=>{box(1,BOXY-LOW,CZ-DZ,x,(LOW+BOXY)/2,(DZ+CZ)/2,0xe9e6df);box(1,-LOW,SZ-CZ,x,LOW/2,(CZ+SZ)/2,0xe9e6df);
+ box(1.2,5,SZ-DZ,x+(x<SXC?1:-1),LOW+2.5,(DZ+SZ)/2,0x8a5a30)});
+box(SW+2,1,CZ-DZ,SXC,BOXY+.5,(DZ+CZ)/2,0x9a6a3a);box(SW,33.5-BOXY,1,SXC,(BOXY+33.5)/2,CZ-.5,0x84502c);
+{const g=new T.Mesh(new T.SphereGeometry(3.2,12,8),gl0());g.position.set(SXC,BOXY-3,DZ+30);sc.add(g)}
+// downstairs: wall with the doorway, a bit of floor and the open door
+box(SXC-DW/2-(SXC-60),LCH-LOW,4,(60+SXC-DW/2)/2,(LOW+LCH)/2,DZ-2,0xe9e6df);box(133-(SXC+DW/2),LCH-LOW,4,(133+SXC+DW/2)/2,(LOW+LCH)/2,DZ-2,0xe9e6df);
+box(DW,LCH-LOW-DH,4,SXC,LOW+DH+(LCH-LOW-DH)/2,DZ-2,0xe9e6df);
+[[SXC-DW/2-1.5,3,DH+3,LOW+(DH+3)/2],[SXC+DW/2+1.5,3,DH+3,LOW+(DH+3)/2],[SXC,DW+6,3,LOW+DH+1.5]].forEach(a=>box(a[1],a[2],5,a[0],a[3],DZ-2,0xf4f2ec));
+box(90,1,90,SXC,LOW-.5,DZ-45,0x5d5a57);
+box(1.4,DH-1,DW,SXC+DW/2,LOW+DH/2,DZ-4-DW/2,0xf4f2ec);
+{const a=new T.Vector3(SX1-2.6,nose(Z1)+34,Z1),b=new T.Vector3(SX1-2.6,nose(SZ-ST)+34,SZ-ST),d=b.clone().sub(a),
+ r=new T.Mesh(new T.CylinderGeometry(1,1,d.length(),10),mat(0x9a6430));r.position.copy(a).add(b).multiplyScalar(.5);
+ r.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),d.normalize());sc.add(r)}
+// outside Walk, cut everything more than 10 in below the attic floor so the shaft does not hang under the model
+const clipP=new T.Plane(new T.Vector3(0,1,0),10);ren.localClippingEnabled=true;
+sc.children.slice(n0).forEach(o=>o.traverse(m=>{if(m.material)m.material.clippingPlanes=[clipP]}));
 panel(97,88.5,BW-.05,44.25,HB+48.5,-Math.PI/2);panel(53.5,33.5,BW-.05,16.75,CZ+26.75,-Math.PI/2);
 {const t=pan.clone(),m=new T.Mesh(new T.ShapeGeometry(new T.Shape([[BW,33.5],[SX,33.5],[SX,SH],[W-RUN,CH],[BW,CH]].map(a=>new T.Vector2(...a)))),new T.MeshLambertMaterial({color:0x84502c,map:t}));t.needsUpdate=true;t.repeat.set(.25,.25);m.position.z=CZ+.05;sc.add(m)}
 fr(215.25,58,17,29.6,1,0x9a5a26);fr(235,58,17,29.6,-1,0x9a5a26);fr(215.25,34.1,17,11.4,0,0x9a5a26);fr(235,34.1,17,11.4,0,0x9a5a26);
@@ -231,16 +254,37 @@ const V={orbit:[.7,1,520,[71,30,198]],plan:[0,.02,560,[71,0,198]],stairs:[0,1.45
 // walk mode: a person at eye height who cannot pass walls, the stair block, furniture or a ceiling below their eyes
 let walk=false,yaw=0,pitch=-.08,eye=64,last=performance.now();const me={x:40,z:330};
 const ceilAt=x=>{const e=Math.min(x,W-x);return e>=RUN?CH:KH+(CH-KH)*Math.max(e,0)/RUN};
-function blocked(x,z){const r=7;if(x<r||x>W-r||z<r||z>L-r)return 1;if(x>BW-r&&z>HB-r&&z<SZ+r)return 1;if(ceilAt(x)<eye+2)return 1;
+const floorAt=(x,z)=>x<=BW||z>=SZ?0:z>=Z1?LOW+SR*(Math.floor((z-Z1)/ST)+1):LOW;
+function inStair(x,z,r){return z<SZ+2&&z>DZ-50&&(z>=DZ+2?x>SX0+r&&x<SX1-r:z>=DZ-4?x>SXC-DW/2+r-2&&x<SXC+DW/2-r+2:z>HB&&x>BW+r&&x<SXC+40)}
+function ceilHere(x,z){return z<DZ?LCH:z<CZ?BOXY:ceilAt(x)}
+function blocked(x,z){const r=7;
+ if(inStair(x,z,5))return floorAt(x,z)+eye+2>ceilHere(x,z)||(Math.abs(z-DZ)<3&&floorAt(x,z)+eye+2>LOW+DH);
+ if(x<r||x>W-r||z<r||z>L-r)return 1;if(x>BW-r&&z>HB-r&&z<SZ+r&&!(z>=SZ&&x>SX0+5&&x<SX1-5))return 1;if(ceilAt(x)<eye+2)return 1;
  for(const m of items){if(!m.visible||m.userData.h<8)continue;const {w,d}=m.userData,c=Math.abs(Math.cos(m.rotation.y)),s=Math.abs(Math.sin(m.rotation.y)),
   hx=(w*c+d*s)/2+r-2,hz=(w*s+d*c)/2+r-2;if(Math.abs(x-m.position.x)<hx&&Math.abs(z-m.position.z)<hz)return 1}return 0}
+let camY=null;
 function step(dx,dz){if(!blocked(me.x+dx,me.z))me.x+=dx;if(!blocked(me.x,me.z+dz))me.z+=dz}
 const ftin=v=>{v=Math.round(v);return Math.floor(v/12)+' ft '+(v%12)+' in'};let hrTxt='';
 function setView(k){document.querySelectorAll('#views button').forEach(b=>b.classList.toggle('on',(b.dataset.v||'walk')==k));
- walk=k=='walk';$('wbar').hidden=!walk;['mv','zi','zo'].forEach(i=>$(i).hidden=walk);cam.fov=walk?72:50;cam.near=walk?.5:1;cam.updateProjectionMatrix();
+ walk=k=='walk';clipP.constant=walk?1e4:10;$('wbar').hidden=!walk;['mv','zi','zo'].forEach(i=>$(i).hidden=walk);cam.fov=walk?72:50;cam.near=walk?.5:1;cam.updateProjectionMatrix();
  if(walk){if(blocked(me.x,me.z)){me.x=40;me.z=330}}else{const v=V[k];th=v[0];ph=v[1];dist=v[2];tg.set(...v[3])}}
 document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>setView(b.dataset.v));
-$('wk').onclick=()=>setView('walk');$('wx').onclick=()=>setView('orbit');
+$('wk').onclick=()=>setView('walk');
+// will a piece make it up the stairs: one side across the 29 in doorway (33 in at the rail),
+// another straight up from the slope under the door header and the wood box (PERP), the third along the stairs
+function fit(){const w=+$('fw').value,d=+$('fd').value,h=+$('fh').value-(+$('fl').value||0),o=$('fo');
+ if(!(w>0&&d>0&&h>0)){o.textContent='Enter the size in inches.';return}
+ const D=[['width',w],['depth',d],['height',h]],M=.5,A=DW-M,P=PERP-M;let best=null;
+ for(const a of D)for(const b of D)if(a!==b&&a[1]<=A&&b[1]<=P){const sp=Math.min(A-a[1],P-b[1]);if(!best||sp>best.sp)best={a,b,sp}}
+ const lim='Limits: '+DW+' in doorway, and about '+Math.floor(PERP)+' in of room straight up from the steps where the wood box hangs over them.';
+ if(best){o.className='ok';o.innerHTML='<b>Fits.</b> Turn it so its '+best.a[0]+' ('+best.a[1]+' in) goes across the doorway. Tightest spot has about '+(Math.floor((best.sp+M)*2)/2)+' in to spare.<br><small>'+lim+'</small>'}
+ else{const mn=Math.min(w,d,h),mid=[w,d,h].sort((x,y)=>x-y)[1];o.className='no';
+  o.innerHTML='<b>Will not fit.</b> '+(mn>A?'Its smallest side is '+mn+' in, '+(Math.ceil((mn-DW)*2)/2)+' in too wide for the doorway. Taking the door off its hinges may gain about 1.5 in, and so can removing legs.':'Its '+mid+' in side is too tall for the slope, by about '+(Math.ceil((mid-PERP)*2)/2)+' in.')+'<br><small>'+lim+'</small>'}}
+['fw','fd','fh','fl'].forEach(i=>$(i).oninput=fit);
+$('fsel').onclick=()=>{if(!cur)return;const u=cur.userData;$('fw').value=u.w;$('fd').value=u.d;$('fh').value=u.h;fit()};
+$('fitb').onclick=()=>{$('fit').hidden=!$('fit').hidden;$('fitb').classList.toggle('on',!$('fit').hidden);if(!$('fit').hidden)fit()};
+$('fx').onclick=()=>$('fitb').click();
+$('fup').onclick=()=>{me.x=SXC;me.z=DZ-30;yaw=Math.PI;pitch=.15;camY=null;setView('walk')};$('wx').onclick=()=>setView('orbit');
 $('eye').onchange=()=>{const v=+$('eye').value;if(v>=30&&v<=80){eye=v;if(blocked(me.x,me.z)){me.x=40;me.z=330}}};
 $('eye').onkeydown=e=>{if(e.key=='Enter')e.target.blur()};
 $('hlp').onclick=()=>{$('help').hidden=!$('help').hidden;$('hlp').classList.toggle('on',!$('help').hidden)};
@@ -297,8 +341,9 @@ new ResizeObserver(()=>{const w=el.clientWidth,h=el.clientHeight;ren.setSize(w,h
 (function f(){const now=performance.now(),dt=Math.min(.05,(now-last)/1000);last=now;mLabels();
  if(walk){const a=(ks.has('ArrowRight')?1:0)-(ks.has('ArrowLeft')?1:0),b=(ks.has('ArrowUp')?1:0)-(ks.has('ArrowDown')?1:0);
   yaw-=a*1.7*dt;if(b){const v=b*40*dt;step(-Math.sin(yaw)*v,-Math.cos(yaw)*v)}
-  cam.position.set(me.x,eye,me.z);cam.lookAt(me.x-Math.sin(yaw)*Math.cos(pitch),eye+Math.sin(pitch),me.z-Math.cos(yaw)*Math.cos(pitch));
-  const c=ceilAt(me.x),low=c<eye+5,t='Ceiling here: '+ftin(c)+(low?'. Your head would touch it.':'');
+  const ty=floorAt(me.x,me.z)+eye;camY=camY==null?ty:camY+(ty-camY)*Math.min(1,dt*10);
+  cam.position.set(me.x,camY,me.z);cam.lookAt(me.x-Math.sin(yaw)*Math.cos(pitch),camY+Math.sin(pitch),me.z-Math.cos(yaw)*Math.cos(pitch));
+  const c=ceilHere(me.x,me.z)-floorAt(me.x,me.z),low=c<eye+5,t='Ceiling here: '+ftin(c)+(low?'. Your head would touch it.':'');
   if(t!==hrTxt){hrTxt=t;$('hr').textContent=t;$('hr').classList.toggle('low',low)}}
  else{if(ks.size){const v=dist*.012,r=[Math.cos(th),-Math.sin(th)],fw=[-Math.sin(th),-Math.cos(th)],a=(ks.has('ArrowRight')?1:0)-(ks.has('ArrowLeft')?1:0),b=(ks.has('ArrowUp')?1:0)-(ks.has('ArrowDown')?1:0);
   tg.x+=(r[0]*a+fw[0]*b)*v*.2;tg.z+=(r[1]*a+fw[1]*b)*v*.2;clampT()}
