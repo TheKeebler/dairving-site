@@ -359,7 +359,7 @@ $('cadd').onclick=()=>{const w=+$('cw').value,d=+$('cd').value,h=+$('chh').value
 $('cust').onkeydown=e=>{if(e.key=='Enter')$('cadd').click();if(e.key=='Escape')$('cx').click()};
 ['iw','idd','ih'].forEach(i=>{$(i).onchange=()=>resize(+$('iw').value,+$('idd').value,+$('ih').value);$(i).onkeydown=e=>{if(e.key=='Enter')e.target.blur()}});
 {const b=add(CAT[1]);b.rotation.y=Math.PI/2;b.position.set(37.5,12,72);selm(null)}
-{const s=add(CAT.find(c=>c[0]=='Printer station'));s.position.set(71,14,379);s.rotation.y=Math.PI;selm(null)}
+{const s=add(CAT.find(c=>c[0]=='Printer station'));s.position.set(71,14,376);s.rotation.y=Math.PI;selm(null)}
 {const f=n=>add(CAT.find(c=>c[0]==n));
  const r=f('Rug 6x6');r.position.set(61.5,.3,72);
  const ns=f('Nightstand');ns.rotation.y=Math.PI/2;ns.position.set(8.5,11.5,115);
@@ -380,17 +380,20 @@ const dec=(n,g)=>{g.userData.n=n;sc.add(g);decor.push(g)};
   if(i%2){const s=new T.Mesh(new T.SphereGeometry(.8,8,6),bm);s.position.set(x+1.2,y-.8,z);g.add(s)}}
  g.add(new T.Line(new T.BufferGeometry().setFromPoints(pts),new T.LineBasicMaterial({color:0x3a2e26})));dec('String lights',g)}
 // PONY DANCE burnt orange blackout panels (42 x 63 in, rod pocket, one pair per window) on black 1 in wraparound rods
-function drapes(name,xc,wz,s,rl,ry){const g=new T.Group(),blk=mat(0x151515,{roughness:.35,metalness:.4}),cm=mat(0xb4552c,{map:fab,roughness:1,side:T.DoubleSide}),
+function drapes(name,xc,wz,s,rl,ry,sl){const g=new T.Group(),blk=mat(0x151515,{roughness:.35,metalness:.4}),cm=mat(0xb4552c,{map:fab,roughness:1,side:T.DoubleSide}),
  r=2,z=wz+s*3.5,x0=xc-rl/2,x1=xc+rl/2,P=(x,zz)=>new T.Vector3(x,ry,zz),path=new T.CurvePath();
  path.add(new T.LineCurve3(P(x0,wz+s*.6),P(x0,z-s*r)));path.add(new T.QuadraticBezierCurve3(P(x0,z-s*r),P(x0,z),P(x0+r,z)));path.add(new T.LineCurve3(P(x0+r,z),P(x1-r,z)));
  path.add(new T.QuadraticBezierCurve3(P(x1-r,z),P(x1,z),P(x1,z-s*r)));path.add(new T.LineCurve3(P(x1,z-s*r),P(x1,wz+s*.6)));
  g.add(new T.Mesh(new T.TubeGeometry(path,90,.5,10,false),blk));
  [x0,x1].forEach(x=>{const b=new T.Mesh(rgeo(2.2,3.6,.6,.25),blk);b.position.set(x,ry,wz+s*.3);g.add(b)});
- const gw=17,H=63;[x0+r+gw/2+.5,x1-r-gw/2-.5].forEach(px=>{const geo=new T.PlaneGeometry(gw,H,40,1),p=geo.attributes.position;
-  for(let k=0;k<p.count;k++)p.setZ(k,Math.sin(p.getX(k)/gw*Math.PI*7)*1.1);geo.computeVertexNormals();
-  const c=new T.Mesh(geo,cm);c.position.set(px,ry+.6-H/2,z);g.add(c);const hem=new T.Mesh(rgeo(gw,2.6,2.8,.9),cm);hem.position.set(px,ry+.4,z);g.add(hem)});
+ // below the sill top the fabric drapes forward over the sill (sl = [sill top, sill left, sill right, sill depth from wall])
+ const gw=17,H=63,y0=ry+.6-H/2,push=Math.max(0,sl[3]+1.6-3.5),sm=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
+ [x0+r+gw/2+.5,x1-r-gw/2-.5].forEach(px=>{const geo=new T.PlaneGeometry(gw,H,40,40),p=geo.attributes.position;
+  for(let k=0;k<p.count;k++){const wx=px+p.getX(k),wy=y0+p.getY(k),inX=Math.min(sm((wx-sl[1]+2)/2),sm((sl[2]+2-wx)/2)),
+   f=sm((sl[0]+7-wy)/6.5)*inX;p.setZ(k,Math.sin(p.getX(k)/gw*Math.PI*7)*1.1+f*push)}geo.computeVertexNormals();
+  const c=new T.Mesh(geo,cm);c.position.set(px,y0,z);if(s<0)c.scale.z=-1;g.add(c);const hem=new T.Mesh(rgeo(gw,2.6,2.8,.9),cm);hem.position.set(px,ry+.4,z);g.add(hem)});
  dec(name,g)}
-drapes('Curtains, printer window',71,L,-1,64,82);drapes('Curtains, bed window',77,0,1,64,82);
+drapes('Curtains, printer window',71,L,-1,64,82,[38,71-19,71+19,5.5]);drapes('Curtains, bed window',77,0,1,64,82,[33,77-24.5,77+24.5,5.5]);
 {const g=new T.Group(),fr=new T.Mesh(new T.BoxGeometry(16,20,1),mat(0xc9a46a)),mt=new T.Mesh(new T.BoxGeometry(14.6,18.6,.4),mat(0xf1efe8)),
  lf=new T.Mesh(new T.PlaneGeometry(12.6,16.6),new T.MeshStandardMaterial({map:leafTex()}));
  fr.position.set(38,55,1.1);mt.position.set(38,55,1.5);lf.position.set(38,55,1.75);g.add(fr,mt,lf);dec('Leaf picture',g)}
