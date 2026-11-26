@@ -171,7 +171,7 @@ function save(){dirty();hist.push(items.map(i=>[i,i.position.x,i.position.z,i.ro
 function undo(){const s=hist.pop();if(!s)return;dirty();items.slice().forEach(i=>{if(!s.some(r=>r[0]==i))sc.remove(i)});items.length=0;
  s.forEach(r=>{const i=r[0];if(!i.parent)sc.add(i);i.position.x=r[1];i.position.z=r[2];i.rotation.y=r[3];i.material.color.setHex(r[4]);tint(i);i.visible=r[5];items.push(i)});if(s.dv)decor.forEach((d,k)=>d.visible=s.dv[k]);
  if(cur&&(!items.includes(cur)||!cur.visible))cur=null;upd();renderList()}
-const CAT=[['Queen bed',60,80,24,0xe6e2d8],['Full bed',54,75,24,0x4b4c50],['Twin bed',39,75,24,0xe6e2d8],['Dresser',60,18,32,0x6e5340],['Nightstand',25,16,23,0x8e4322],['Desk',48,24,30,0xa88b66],['Bookshelf',30,12,72,0x6e5340],['Wardrobe',36,22,72,0x7d6a58],['Sofa',80,36,32,0x5f7a86],['Armchair',32,32,18,0x8a5d4a],['TV stand',48,16,22,0x4a4540],['Rug 5x8',60,96,.6,0x7a3f3a],['Printer station',60,24,28,0xe6cfa4],['Rug 5x7',60,84,.6,0x9a4a2c],['Rug 6x9',72,108,.6,0x9a4a2c],['Floor mat',60,44,.3,0x4a4f55],['Plant',12,12,14,0xa4522f],['Side table',27,23,20,0xb98748],['Floor lamp',11,11,1.2,0x16161a],['Wire shelf',36,14,48,0x8a8f96],['Big mirror',20,7,36,0xc9a24a],['Hall runner',30,120,.5,0x8b4a2e],['Rug 6x6',73,73,.6,0x8f9b78],['Woven basket',16,16,15,0xc8a56a]];
+const CAT=[['Queen bed',60,80,24,0xe6e2d8],['Full bed',54,75,24,0x4b4c50],['Twin bed',39,75,24,0xe6e2d8],['Dresser',60,18,32,0x6e5340],['Nightstand',25,16,23,0x8e4322],['Desk',48,24,30,0xa88b66],['Bookshelf',30,12,72,0x6e5340],['Wardrobe',36,22,72,0x7d6a58],['Sofa',80,36,32,0x5f7a86],['Armchair',32,32,18,0x8a5d4a],['TV stand',48,16,22,0x4a4540],['Rug 5x8',60,96,.6,0x7a3f3a],['Printer station',60,24,28,0xe6cfa4],['Rug 5x7',60,84,.6,0x9a4a2c],['Rug 6x9',72,108,.6,0x9a4a2c],['Floor mat',60,44,.3,0x4a4f55],['Plant',12,12,14,0xa4522f],['Side table',27,23,20,0xb98748],['Floor lamp',11,11,1.2,0x16161a],['Wire shelf',36,14,48,0x8a8f96],['Big mirror',20,7,36,0xc9a24a],['Hall runner',30,120,.5,0xb8642f],['Rug 6x6',73,73,.6,0x8f9b78],['Woven basket',16,16,15,0xc8a56a]];
 // extra height that sits above the base box (headboard, printer, leaves, chair back, lamp pole)
 const EX=n=>/ bed$/.test(n)?14:({'Printer station':20,Plant:26,Armchair:16,'Floor lamp':52.8})[n]||0;
 const GRP={Furniture:['Queen bed','Full bed','Twin bed','Dresser','Nightstand','Side table','Desk','Bookshelf','Wardrobe','Sofa','Armchair','TV stand'],Rugs:['Rug 5x8','Rug 5x7','Rug 6x9','Rug 6x6','Hall runner','Floor mat'],Decor:['Plant','Floor lamp','Big mirror','Woven basket'],Hobby:['Printer station','Wire shelf']};
@@ -277,9 +277,12 @@ function mirror(m){const {w,h}=m.userData;m.material.transparent=true;m.material
  const fr=pill(new T.Shape(),w/2,h);fr.holes.push(pill(new T.Path(),w/2-.9,h-1.8));
  const f=new T.Mesh(new T.ExtrudeGeometry(fr,{depth:1.2,bevelEnabled:false}),mat(0xc9a24a));f.position.set(0,h/2,.2);
  const g=new T.Mesh(new T.ShapeGeometry(pill(new T.Shape(),w/2-.9,h-1.8)),new T.MeshStandardMaterial({color:0xa9c2c8,emissive:0x203438}));g.position.set(0,h/2,1.1);const lg=new T.Group();lg.position.set(0,-h/2,2.7);lg.rotation.x=-.17;lg.add(f,g);m.add(lg)}
-function runner(m){const {w,d}=m.userData;[-1,1].forEach(s=>{const b=new T.Mesh(new T.BoxGeometry(2,.15,d-6),mat(0xe9dcc0));b.position.set(s*(w/2-4),.3,0);m.add(b)})}
-// 48 x 24 table with a Form Studio 1 (13.5 x 12.4 x 19.8 in: teal Founders Edition base, front touchscreen, orange cover),
-// VOC extractor hosed to the vent port, Wash+Cure (13 x 11.8 x 17.3 in) and everyday printing clutter
+// KOZYFLY braided runner: burnt orange with tan flecks and a tan bound edge
+function runner(m){const {w,d}=m.userData,c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,128,128);
+ for(let r=0;r<128;r+=6)for(let i=0;i<128;i+=6){const g=200+Math.random()*55|0,dir=(r/6|0)%2?1:-1;x.fillStyle='rgb('+g+','+(g-8)+','+(g-20)+')';x.save();x.translate(i+3,r+3);x.rotate(dir*.75);x.fillRect(-3.4,-1.3,6.8,2.6);x.restore();
+  if(Math.random()<.12){x.fillStyle='rgba(255,235,200,.8)';x.fillRect(i+1,r+2,3,1.5)}}
+ const t=new T.CanvasTexture(c);t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(w/4,d/4);Object.assign(m.material,{map:t,roughness:1});
+ const tan=mat(0xc79a68,{roughness:1});[-1,1].forEach(s=>{bx(m,1,.62,d,tan,s*(w/2-.5),0,0);bx(m,w,.62,1,tan,0,0,s*(d/2-.5))})}
 function screenTex(){const c=document.createElement('canvas');c.width=256;c.height=160;const x=c.getContext('2d');x.fillStyle='#0f1418';x.fillRect(0,0,256,160);
  x.fillStyle='#e8eef2';x.font='bold 22px sans-serif';x.fillText('Printing',18,42);x.font='16px sans-serif';x.fillStyle='#9fb0bb';x.fillText('Layer 412 / 980',18,70);
  x.fillStyle='#2b343b';x.fillRect(18,96,220,12);x.fillStyle='#f07a2a';x.fillRect(18,96,93,12);x.fillStyle='#e8eef2';x.fillText('42%   1h 08m left',18,136);return new T.CanvasTexture(c)}
@@ -356,7 +359,7 @@ $('cadd').onclick=()=>{const w=+$('cw').value,d=+$('cd').value,h=+$('chh').value
 $('cust').onkeydown=e=>{if(e.key=='Enter')$('cadd').click();if(e.key=='Escape')$('cx').click()};
 ['iw','idd','ih'].forEach(i=>{$(i).onchange=()=>resize(+$('iw').value,+$('idd').value,+$('ih').value);$(i).onkeydown=e=>{if(e.key=='Enter')e.target.blur()}});
 {const b=add(CAT[1]);b.rotation.y=Math.PI/2;b.position.set(37.5,12,72);selm(null)}
-{const s=add(CAT.find(c=>c[0]=='Printer station'));s.position.set(71,14,384);s.rotation.y=Math.PI;selm(null)}
+{const s=add(CAT.find(c=>c[0]=='Printer station'));s.position.set(71,14,379);s.rotation.y=Math.PI;selm(null)}
 {const f=n=>add(CAT.find(c=>c[0]==n));
  const r=f('Rug 6x6');r.position.set(61.5,.3,72);
  const ns=f('Nightstand');ns.rotation.y=Math.PI/2;ns.position.set(8.5,11.5,115);
@@ -376,10 +379,18 @@ const dec=(n,g)=>{g.userData.n=n;sc.add(g);decor.push(g)};
  for(let i=0;i<=24;i++){const u=i/24,x=5.5,y=KH+(CH-KH)*x/RUN-2.2-3.5*Math.abs(Math.sin(u*3*Math.PI)),z=10+u*138;pts.push(new T.Vector3(x+1.2,y,z));
   if(i%2){const s=new T.Mesh(new T.SphereGeometry(.8,8,6),bm);s.position.set(x+1.2,y-.8,z);g.add(s)}}
  g.add(new T.Line(new T.BufferGeometry().setFromPoints(pts),new T.LineBasicMaterial({color:0x3a2e26})));dec('String lights',g)}
-{const g=new T.Group(),cm=mat(0xa4532f),z=L-3.5,rod=new T.Mesh(new T.CylinderGeometry(.5,.5,84,8),mat(0x3a2e26));
- rod.rotation.z=Math.PI/2;rod.position.set(71,74,z);g.add(rod);
- [38,104].forEach(x=>{const p=new T.Mesh(new T.BoxGeometry(16,60,2.5),cm);p.position.set(x,44,z);g.add(p);
-  for(let k=-1;k<=1;k++){const f=new T.Mesh(new T.BoxGeometry(.6,60,2.9),mat(0x8c4325));f.position.set(x+k*5,44,z);g.add(f)}});dec('Curtains',g)}
+// PONY DANCE burnt orange blackout panels (42 x 63 in, rod pocket, one pair per window) on black 1 in wraparound rods
+function drapes(name,xc,wz,s,rl,ry){const g=new T.Group(),blk=mat(0x151515,{roughness:.35,metalness:.4}),cm=mat(0xb4552c,{map:fab,roughness:1,side:T.DoubleSide}),
+ r=2,z=wz+s*3.5,x0=xc-rl/2,x1=xc+rl/2,P=(x,zz)=>new T.Vector3(x,ry,zz),path=new T.CurvePath();
+ path.add(new T.LineCurve3(P(x0,wz+s*.6),P(x0,z-s*r)));path.add(new T.QuadraticBezierCurve3(P(x0,z-s*r),P(x0,z),P(x0+r,z)));path.add(new T.LineCurve3(P(x0+r,z),P(x1-r,z)));
+ path.add(new T.QuadraticBezierCurve3(P(x1-r,z),P(x1,z),P(x1,z-s*r)));path.add(new T.LineCurve3(P(x1,z-s*r),P(x1,wz+s*.6)));
+ g.add(new T.Mesh(new T.TubeGeometry(path,90,.5,10,false),blk));
+ [x0,x1].forEach(x=>{const b=new T.Mesh(rgeo(2.2,3.6,.6,.25),blk);b.position.set(x,ry,wz+s*.3);g.add(b)});
+ const gw=17,H=63;[x0+r+gw/2+.5,x1-r-gw/2-.5].forEach(px=>{const geo=new T.PlaneGeometry(gw,H,40,1),p=geo.attributes.position;
+  for(let k=0;k<p.count;k++)p.setZ(k,Math.sin(p.getX(k)/gw*Math.PI*7)*1.1);geo.computeVertexNormals();
+  const c=new T.Mesh(geo,cm);c.position.set(px,ry+.6-H/2,z);g.add(c);const hem=new T.Mesh(rgeo(gw,2.6,2.8,.9),cm);hem.position.set(px,ry+.4,z);g.add(hem)});
+ dec(name,g)}
+drapes('Curtains, printer window',71,L,-1,64,82);drapes('Curtains, bed window',77,0,1,64,82);
 {const g=new T.Group(),fr=new T.Mesh(new T.BoxGeometry(16,20,1),mat(0xc9a46a)),mt=new T.Mesh(new T.BoxGeometry(14.6,18.6,.4),mat(0xf1efe8)),
  lf=new T.Mesh(new T.PlaneGeometry(12.6,16.6),new T.MeshStandardMaterial({map:leafTex()}));
  fr.position.set(38,55,1.1);mt.position.set(38,55,1.5);lf.position.set(38,55,1.75);g.add(fr,mt,lf);dec('Leaf picture',g)}
