@@ -42,22 +42,21 @@ const n0=sc.children.length,SR=9,ST=9.5,NT=11,LOW=-SR*(NT+1),SW=36,SXC=(BW+4.75+
  nose=z=>LOW+SR+(z-Z1)*SR/ST,
  PH=(LOW+DH-nose(DZ))*Math.cos(TH),PB=(BOXY-nose(CZ))*Math.cos(TH),PERP=Math.min(PH,PB);
 for(let k=1;k<=NT;k++){box(SW,SR*k,ST,SXC,LOW+SR*k/2,Z1+ST*(k-.5),0x8b6f5e);box(SW,.6,1.2,SXC,LOW+SR*k-.3,Z1+ST*(k-1)+.6,0x6f5446)}
-[SX0-.5,SX1+.5].forEach(x=>{box(1,BOXY-LOW,CZ-DZ,x,(LOW+BOXY)/2,(DZ+CZ)/2,0xe9e6df);box(1,-LOW,SZ-CZ,x,LOW/2,(CZ+SZ)/2,0xe9e6df);
+const shaft=[];
+[SX0-.5,SX1+.5].forEach(x=>{shaft.push(box(1,BOXY-LOW,CZ-DZ,x,(LOW+BOXY)/2,(DZ+CZ)/2,0xe9e6df),box(1,-LOW,SZ-CZ,x,LOW/2,(CZ+SZ)/2,0xe9e6df));
  box(1.2,5,SZ-DZ,x+(x<SXC?1:-1),LOW+2.5,(DZ+SZ)/2,0x8a5a30)});
-box(SW+2,1,CZ-DZ,SXC,BOXY+.5,(DZ+CZ)/2,0x9a6a3a);box(SW,33.5-BOXY,1,SXC,(BOXY+33.5)/2,CZ-.5,0x84502c);
+shaft.push(box(SW+2,1,CZ-DZ,SXC,BOXY+.5,(DZ+CZ)/2,0x9a6a3a));box(SW,33.5-BOXY,1,SXC,(BOXY+33.5)/2,CZ-.5,0x84502c);
 {const g=new T.Mesh(new T.SphereGeometry(3.2,12,8),gl0());g.position.set(SXC,BOXY-3,DZ+30);sc.add(g)}
 // downstairs: wall with the doorway, a bit of floor and the open door
-box(SXC-DW/2-(SXC-60),LCH-LOW,4,(60+SXC-DW/2)/2,(LOW+LCH)/2,DZ-2,0xe9e6df);box(133-(SXC+DW/2),LCH-LOW,4,(133+SXC+DW/2)/2,(LOW+LCH)/2,DZ-2,0xe9e6df);
-box(DW,LCH-LOW-DH,4,SXC,LOW+DH+(LCH-LOW-DH)/2,DZ-2,0xe9e6df);
+shaft.push(box(SXC-DW/2-(SXC-60),LCH-LOW,4,(60+SXC-DW/2)/2,(LOW+LCH)/2,DZ-2,0xe9e6df),box(133-(SXC+DW/2),LCH-LOW,4,(133+SXC+DW/2)/2,(LOW+LCH)/2,DZ-2,0xe9e6df),
+ box(DW,LCH-LOW-DH,4,SXC,LOW+DH+(LCH-LOW-DH)/2,DZ-2,0xe9e6df));
 [[SXC-DW/2-1.5,3,DH+3,LOW+(DH+3)/2],[SXC+DW/2+1.5,3,DH+3,LOW+(DH+3)/2],[SXC,DW+6,3,LOW+DH+1.5]].forEach(a=>box(a[1],a[2],5,a[0],a[3],DZ-2,0xf4f2ec));
 box(90,1,90,SXC,LOW-.5,DZ-45,0x5d5a57);
 box(1.4,DH-1,DW,SXC+DW/2,LOW+DH/2,DZ-4-DW/2,0xf4f2ec);
 {const a=new T.Vector3(SX1-2.6,nose(Z1)+34,Z1),b=new T.Vector3(SX1-2.6,nose(SZ-ST)+34,SZ-ST),d=b.clone().sub(a),
  r=new T.Mesh(new T.CylinderGeometry(1,1,d.length(),10),mat(0x9a6430));r.position.copy(a).add(b).multiplyScalar(.5);
  r.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),d.normalize());sc.add(r)}
-// outside Walk, cut everything more than 10 in below the attic floor so the shaft does not hang under the model
-const clipP=new T.Plane(new T.Vector3(0,1,0),10);ren.localClippingEnabled=true;
-sc.children.slice(n0).forEach(o=>o.traverse(m=>{if(m.material)m.material.clippingPlanes=[clipP]}));
+// from outside the attic the stair walls and downstairs wall hide, so the steps show as a cutaway under the model
 panel(97,88.5,BW-.05,44.25,HB+48.5,-Math.PI/2);panel(53.5,33.5,BW-.05,16.75,CZ+26.75,-Math.PI/2);
 {const t=pan.clone(),m=new T.Mesh(new T.ShapeGeometry(new T.Shape([[BW,33.5],[SX,33.5],[SX,SH],[W-RUN,CH],[BW,CH]].map(a=>new T.Vector2(...a)))),new T.MeshLambertMaterial({color:0x84502c,map:t}));t.needsUpdate=true;t.repeat.set(.25,.25);m.position.z=CZ+.05;sc.add(m)}
 fr(215.25,58,17,29.6,1,0x9a5a26);fr(235,58,17,29.6,-1,0x9a5a26);fr(215.25,34.1,17,11.4,0,0x9a5a26);fr(235,34.1,17,11.4,0,0x9a5a26);
@@ -250,7 +249,7 @@ selm(null);hist.length=0;renderList();
 // camera and pointer controls
 const ray=new T.Raycaster(),pl=new T.Plane(new T.Vector3(0,1,0),0),v3=new T.Vector3(),off=[0,0],ps=new Map();
 let th=.7,ph=1,dist=520,tg=new T.Vector3(W/2,30,L/2),drag=null,pd=0;
-const V={orbit:[.7,1,520,[71,30,198]],plan:[0,.02,560,[71,0,198]],stairs:[0,1.45,70,[71,50,300]],bed:[Math.PI,1.45,170,[71,50,230]]};
+const V={orbit:[.7,1,520,[71,30,198]],plan:[0,.02,560,[71,0,198]],stairs:[0,1.45,70,[71,50,300]],bed:[Math.PI,1.45,170,[71,50,230]],stair:[1.25,1.2,300,[96,-45,245]]};
 // walk mode: a person at eye height who cannot pass walls, the stair block, furniture or a ceiling below their eyes
 let walk=false,yaw=0,pitch=-.08,eye=64,last=performance.now();const me={x:40,z:330};
 const ceilAt=x=>{const e=Math.min(x,W-x);return e>=RUN?CH:KH+(CH-KH)*Math.max(e,0)/RUN};
@@ -266,7 +265,7 @@ let camY=null;
 function step(dx,dz){if(!blocked(me.x+dx,me.z))me.x+=dx;if(!blocked(me.x,me.z+dz))me.z+=dz}
 const ftin=v=>{v=Math.round(v);return Math.floor(v/12)+' ft '+(v%12)+' in'};let hrTxt='';
 function setView(k){document.querySelectorAll('#views button').forEach(b=>b.classList.toggle('on',(b.dataset.v||'walk')==k));
- walk=k=='walk';clipP.constant=walk?1e4:10;$('wbar').hidden=!walk;['mv','zi','zo'].forEach(i=>$(i).hidden=walk);cam.fov=walk?72:50;cam.near=walk?.5:1;cam.updateProjectionMatrix();
+ walk=k=='walk';$('wbar').hidden=!walk;['mv','zi','zo'].forEach(i=>$(i).hidden=walk);cam.fov=walk?72:50;cam.near=walk?.5:1;cam.updateProjectionMatrix();
  if(walk){if(blocked(me.x,me.z)){me.x=40;me.z=330}}else{const v=V[k];th=v[0];ph=v[1];dist=v[2];tg.set(...v[3])}}
 document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>setView(b.dataset.v));
 $('wk').onclick=()=>setView('walk');
@@ -349,4 +348,5 @@ new ResizeObserver(()=>{const w=el.clientWidth,h=el.clientHeight;ren.setSize(w,h
   tg.x+=(r[0]*a+fw[0]*b)*v*.2;tg.z+=(r[1]*a+fw[1]*b)*v*.2;clampT()}
  cam.position.set(tg.x+dist*Math.sin(ph)*Math.sin(th),tg.y+dist*Math.cos(ph),tg.z+dist*Math.sin(ph)*Math.cos(th));
  cam.lookAt(tg)}
+ {const p=cam.position,inside=walk||(p.x>-1&&p.x<W+1&&p.z>-1&&p.z<L+1&&p.y<CH+2);if(shaft[0].visible!==inside)shaft.forEach(o=>o.visible=inside)}
  ren.render(sc,cam);requestAnimationFrame(f)})();
