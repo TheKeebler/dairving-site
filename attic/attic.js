@@ -367,9 +367,10 @@ const V={orbit:[.7,1,520,[71,30,198]],plan:[0,.02,560,[71,0,198]],stairs:[0,1.45
 // walk mode: a person at eye height who cannot pass walls, the stair block, furniture or a ceiling below their eyes
 let walk=false,yaw=0,pitch=-.08,eye=64,last=performance.now();const me={x:40,z:330};
 const ceilAt=x=>{const e=Math.min(x,W-x);return e>=RUN?CH:KH+(CH-KH)*Math.max(e,0)/RUN};
-const floorAt=(x,z)=>x<=BW||z>=SZ?0:z>=Z1?LOW+SR*(Math.floor((z-Z1)/ST)+1):LOW;
+// only the stairwell (beside the hall, between the bedroom end and the top step) is below the attic floor
+const underAttic=(x,z)=>x>BW&&z>HB&&z<SZ,floorAt=(x,z)=>!underAttic(x,z)?0:z>=Z1?LOW+SR*(Math.floor((z-Z1)/ST)+1):LOW;
 function inStair(x,z,r){return z<SZ+2&&z>DZ-50&&(z>=DZ+2?x>SX0+r&&x<SX1-r:z>=DZ-4?x>SXC-DW/2+r-2&&x<SXC+DW/2-r+2:z>HB&&x>BW+r&&x<SXC+40)}
-function ceilHere(x,z){return x>BW&&z<SZ?(z<DZ?LCH:z<CZ?BOXY:ceilAt(x)):ceilAt(x)}
+function ceilHere(x,z){return underAttic(x,z)?(z<DZ?LCH:z<CZ?BOXY:ceilAt(x)):ceilAt(x)}
 function blocked(x,z){const r=7;
  if(inStair(x,z,5))return floorAt(x,z)+eye+2>ceilHere(x,z)||(Math.abs(z-DZ)<3&&floorAt(x,z)+eye+2>LOW+DH);
  if(x<r||x>W-r||z<r||z>L-r)return 1;if(x>BW-r&&z>HB-r&&z<SZ+r&&!(z>=SZ&&x>SX0+5&&x<SX1-5))return 1;if(ceilAt(x)<eye+2)return 1;
