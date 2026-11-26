@@ -40,7 +40,7 @@ const SR=9,ST=9.5,NT=11,LOW=-SR*(NT+1),SW=36,SXC=(BW+4.75+SX)/2,SX0=SXC-SW/2,SX1
  PH=(LOW+DH-nose(DZ))*Math.cos(TH),PB=(BOXY-nose(CZ))*Math.cos(TH),PERP=Math.min(PH,PB);
 // cabinet block over the hall; where it hangs over the lower stairs its underside is BOXY above the attic floor
 ext([[BW,0],[W,0],[W,KH],[W-RUN,CH],[BW,CH]],HB,DZ-HB,0x784a29);
-ext([[BW,0],[SX0,0],[SX0,BOXY],[SX1,BOXY],[SX1,0],[W,0],[W,KH],[W-RUN,CH],[BW,CH]],DZ,CZ-DZ,0x784a29);
+ext([[BW,0],[SX0-.7,0],[SX0-.7,BOXY],[SX1+.7,BOXY],[SX1+.7,0],[W,0],[W,KH],[W-RUN,CH],[BW,CH]],DZ,CZ-DZ,0x784a29);
 ext([[SX,0],[W,0],[W,KH],[SX,SH]],CZ,53.5,0xe4e6e8);
 box(4.75,33.5,53.5,BW+2.4,16.75,CZ+26.75,0x784a29);
 // stairs down to the second floor: 12 risers of 9 in, 11 treads of 9.5 in, 36 in wall to wall,
