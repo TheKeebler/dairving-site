@@ -380,23 +380,27 @@ const dec=(n,g)=>{g.userData.n=n;sc.add(g);decor.push(g)};
   if(i%2){const s=new T.Mesh(new T.SphereGeometry(.8,8,6),bm);s.position.set(x+1.2,y-.8,z);g.add(s)}}
  g.add(new T.Line(new T.BufferGeometry().setFromPoints(pts),new T.LineBasicMaterial({color:0x3a2e26})));dec('String lights',g)}
 // PONY DANCE burnt orange blackout panels (42 x 63 in, rod pocket, one pair per window) on black 1 in wraparound rods
-function drapes(name,xc,wz,s,rl,ry,sl){const g=new T.Group(),blk=mat(0x151515,{roughness:.35,metalness:.4}),cm=mat(0xb4552c,{map:fab,roughness:1,side:T.DoubleSide}),
- r=2,z=wz+s*3.5,x0=xc-rl/2,x1=xc+rl/2,P=(x,zz)=>new T.Vector3(x,ry,zz),path=new T.CurvePath();
+// pan = [[center x, stacked width], ...]: each 42 in panel pushed open bunches to about 12 to 13 in
+function drapes(name,wz,s,x0,x1,ry,pan,sl){const g=new T.Group(),blk=mat(0x151515,{roughness:.35,metalness:.4}),cm=mat(0xb4552c,{map:fab,roughness:1,side:T.DoubleSide}),
+ r=2,z=wz+s*3.5,P=(x,zz)=>new T.Vector3(x,ry,zz),path=new T.CurvePath();
  path.add(new T.LineCurve3(P(x0,wz+s*.6),P(x0,z-s*r)));path.add(new T.QuadraticBezierCurve3(P(x0,z-s*r),P(x0,z),P(x0+r,z)));path.add(new T.LineCurve3(P(x0+r,z),P(x1-r,z)));
  path.add(new T.QuadraticBezierCurve3(P(x1-r,z),P(x1,z),P(x1,z-s*r)));path.add(new T.LineCurve3(P(x1,z-s*r),P(x1,wz+s*.6)));
  g.add(new T.Mesh(new T.TubeGeometry(path,90,.5,10,false),blk));
  [x0,x1].forEach(x=>{const b=new T.Mesh(rgeo(2.2,3.6,.6,.25),blk);b.position.set(x,ry,wz+s*.3);g.add(b)});
  // below the sill top the fabric drapes forward over the sill (sl = [sill top, sill left, sill right, sill depth from wall])
- const gw=17,H=63,y0=ry+.6-H/2,push=Math.max(0,sl[3]+1.6-3.5),sm=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
- [x0+r+gw/2+.5,x1-r-gw/2-.5].forEach(px=>{const geo=new T.PlaneGeometry(gw,H,40,40),p=geo.attributes.position;
+ const H=63,y0=ry+.6-H/2,push=Math.max(0,sl[3]+1.6-3.5),sm=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
+ pan.forEach(([px,gw])=>{const geo=new T.PlaneGeometry(gw,H,36,40),p=geo.attributes.position,nw=Math.round(gw*.45);
   for(let k=0;k<p.count;k++){const wx=px+p.getX(k),wy=y0+p.getY(k),inX=Math.min(sm((wx-sl[1]+2)/2),sm((sl[2]+2-wx)/2)),
-   f=sm((sl[0]+7-wy)/6.5)*inX;p.setZ(k,Math.sin(p.getX(k)/gw*Math.PI*7)*1.1+f*push)}geo.computeVertexNormals();
+   f=sm((sl[0]+7-wy)/6.5)*inX;p.setZ(k,Math.sin(p.getX(k)/gw*Math.PI*nw)*1.4+f*push)}geo.computeVertexNormals();
   const c=new T.Mesh(geo,cm);c.position.set(px,y0,z);if(s<0)c.scale.z=-1;g.add(c);const hem=new T.Mesh(rgeo(gw,2.6,2.8,.9),cm);hem.position.set(px,ry+.4,z);g.add(hem)});
  dec(name,g)}
-drapes('Curtains, printer window',71,L,-1,64,82,[38,71-19,71+19,5.5]);drapes('Curtains, bed window',77,0,1,64,82,[33,77-24.5,77+24.5,5.5]);
+// printer window: both panels clear its sill (52 to 90). Bed window: the sloped ceiling starts near x 110 at rod height,
+// so its right panel can only get partway past the sill (52.5 to 101.5); the overlap drapes in front of the sill
+drapes('Curtains, printer window',L,-1,36,106,82,[[44.5,13],[97.5,13]],[38,52,90,5.5]);
+drapes('Curtains, bed window',0,1,36,106,82,[[44.5,13],[98.5,10]],[33,52.5,101.5,5.5]);
 {const g=new T.Group(),fr=new T.Mesh(new T.BoxGeometry(16,20,1),mat(0xc9a46a)),mt=new T.Mesh(new T.BoxGeometry(14.6,18.6,.4),mat(0xf1efe8)),
  lf=new T.Mesh(new T.PlaneGeometry(12.6,16.6),new T.MeshStandardMaterial({map:leafTex()}));
- fr.position.set(38,55,1.1);mt.position.set(38,55,1.5);lf.position.set(38,55,1.75);g.add(fr,mt,lf);dec('Leaf picture',g)}
+ fr.position.set(26,55,1.1);mt.position.set(26,55,1.5);lf.position.set(26,55,1.75);g.add(fr,mt,lf);dec('Leaf picture',g)}
 {const g=new T.Group();[[71,CH-6,60],[71,CH-11,330]].forEach(p=>{const l=new T.PointLight(0xffc27a,.75,300);l.position.set(...p);l.castShadow=true;l.shadow.mapSize.set(768,768);l.shadow.bias=-.004;l.shadow.camera.near=1;l.shadow.camera.far=420;g.add(l)});dec('Warm bulb glow',g)}
 lin(sc);selm(null);hist.length=0;renderList();
 function setQ(hi){dirty();ren.shadowMap.enabled=hi;ren.setPixelRatio(hi?Math.min(devicePixelRatio,2):1);ren.setSize(el.clientWidth,el.clientHeight,false);
