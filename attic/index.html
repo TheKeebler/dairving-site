@@ -5,16 +5,22 @@
 <title>Attic planner</title>
 <link rel="stylesheet" href="attic.css"></head><body><div id="a">
 <div class="b"><b>Attic planner</b>
-<div class="grp" id="views"><button data-v="orbit" class="on">Overview</button><button data-v="plan">Plan</button><button data-v="stairs">From stairs</button><button data-v="bed">From bed end</button><button id="wk" title="Walk through at eye height">Walk</button></div>
-<button id="undo" title="Ctrl or Cmd + Z">Undo</button><button id="ms" title="Click two points to measure a distance">Measure</button><button id="mc" hidden>Clear measurements</button><button id="lstb">Show or hide</button><label>Walls <input type="color" id="wc" value="#c8a27a"></label><button id="hlp" title="How to use the planner">?</button></div>
+<div class="grp" id="views"><button data-v="orbit" class="on">Overview</button><button data-v="plan">Plan</button><button data-v="stairs">From stairs</button><button data-v="bed">From bed end</button><button data-v="stair">Stairs</button><button id="wk" title="Walk through at eye height">Walk</button></div>
+<button id="undo" title="Ctrl or Cmd + Z">Undo</button><button id="ms" title="Click two points to measure a distance">Measure</button><button id="mc" hidden>Clear measurements</button><button id="lstb">Show or hide</button><label>Walls <input type="color" id="wc" value="#c8a27a"></label><button id="fitb" title="Check if a piece makes it up the stairs">Stair fit</button><button id="hlp" title="How to use the planner">?</button></div>
 <div class="b" id="lst" hidden></div>
 <div id="c">
 <div class="ov" id="help" hidden>
 <h4>Looking around</h4><p>Drag empty space to turn the room. Scroll or pinch to zoom. Right-drag, Shift-drag, two fingers or the Slide button to slide the view. Arrow keys or WASD move. Double-click the floor to look there.</p>
 <h4>Furniture</h4><p>Pick a piece from the bottom bar, or Custom size for something you found. Drag to move it. Click a piece to type its real width, depth and height in inches. R rotates, H hides, Delete removes. Red means it does not fit, and the bar says why.</p>
 <h4>Walk</h4><p>W and S (or up and down arrows) walk. A and D (or left and right arrows) turn. Drag to look around. Double-click the floor to jump there. You cannot walk where the ceiling is below your eyes.</p>
+<h4>Stairs</h4><p>Stair fit checks if a piece makes it up: type its size or pick it in the room and press Use selected piece. In Walk, you can walk down the stairs and back up.</p>
 <h4>Measure</h4><p>Click two points. It snaps to the corners of pieces. Esc stops.</p>
 <h4>Undo</h4><p>Ctrl or Cmd + Z.</p></div>
+<div class="ov" id="fit" hidden><b>Will it fit up the stairs?</b>
+<div class="fr"><label>W <input type="number" id="fw" value="32" min="1" step="0.5"></label><label>D <input type="number" id="fd" value="32" min="1" step="0.5"></label><label>H <input type="number" id="fh" value="34" min="1" step="0.5"></label><small>in</small></div>
+<div class="fr"><label>Legs come off <input type="number" id="fl" value="0" min="0" step="0.5"> in</label></div>
+<div id="fo"></div>
+<div class="fr"><button id="fsel" title="Copy the size of the selected piece">Use selected piece</button><button id="fup">Walk up from downstairs</button><button id="fx">Close</button></div></div>
 <div class="ov" id="wbar" hidden><b>Walking</b><label>Eye height <input type="number" id="eye" value="64" min="30" max="80" step="1"> in</label><span id="hr"></span><button id="wx">Exit walk</button></div>
 <div class="ov" id="pad"><button id="mv" title="When on, dragging empty space slides the view">Slide</button><button data-k="ArrowLeft" title="Left">&larr;</button><button data-k="ArrowUp" title="Forward">&uarr;</button><button data-k="ArrowDown" title="Back">&darr;</button><button data-k="ArrowRight" title="Right">&rarr;</button><button id="zi" title="Zoom in">+</button><button id="zo" title="Zoom out">&minus;</button></div>
 </div>
