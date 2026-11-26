@@ -382,16 +382,16 @@ const dec=(n,g)=>{g.userData.n=n;sc.add(g);decor.push(g)};
 // PONY DANCE burnt orange blackout panels (42 x 63 in, rod pocket, one pair per window) on black 1 in wraparound rods
 // pan = [[center x, stacked width], ...]: each 42 in panel pushed open bunches to about 12 to 13 in
 function drapes(name,wz,s,x0,x1,ry,pan,sl){const g=new T.Group(),blk=mat(0x151515,{roughness:.35,metalness:.4}),cm=mat(0xb4552c,{map:fab,roughness:1,side:T.DoubleSide}),
- r=2,z=wz+s*3.5,P=(x,zz)=>new T.Vector3(x,ry,zz),path=new T.CurvePath();
+ r=2,z=wz+s*4,P=(x,zz)=>new T.Vector3(x,ry,zz),path=new T.CurvePath();
  path.add(new T.LineCurve3(P(x0,wz+s*.6),P(x0,z-s*r)));path.add(new T.QuadraticBezierCurve3(P(x0,z-s*r),P(x0,z),P(x0+r,z)));path.add(new T.LineCurve3(P(x0+r,z),P(x1-r,z)));
  path.add(new T.QuadraticBezierCurve3(P(x1-r,z),P(x1,z),P(x1,z-s*r)));path.add(new T.LineCurve3(P(x1,z-s*r),P(x1,wz+s*.6)));
  g.add(new T.Mesh(new T.TubeGeometry(path,90,.5,10,false),blk));
  [x0,x1].forEach(x=>{const b=new T.Mesh(rgeo(2.2,3.6,.6,.25),blk);b.position.set(x,ry,wz+s*.3);g.add(b)});
  // below the sill top the fabric drapes forward over the sill (sl = [sill top, sill left, sill right, sill depth from wall])
- const H=63,y0=ry+.6-H/2,push=Math.max(0,sl[3]+1.6-3.5),sm=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
+ const H=63,y0=ry+.6-H/2,push=Math.max(0,sl[3]+1.6-4),sm=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
  pan.forEach(([px,gw])=>{const geo=new T.PlaneGeometry(gw,H,36,40),p=geo.attributes.position,nw=Math.round(gw*.45);
   for(let k=0;k<p.count;k++){const wx=px+p.getX(k),wy=y0+p.getY(k),inX=Math.min(sm((wx-sl[1]+2)/2),sm((sl[2]+2-wx)/2)),
-   f=sm((sl[0]+7-wy)/6.5)*inX;p.setZ(k,Math.sin(p.getX(k)/gw*Math.PI*nw)*1.4+f*push)}geo.computeVertexNormals();
+   f=sm((sl[0]+7-wy)/6.5)*inX;p.setZ(k,Math.sin(p.getX(k)/gw*Math.PI*nw)*.95+f*push)}geo.computeVertexNormals();
   const c=new T.Mesh(geo,cm);c.position.set(px,y0,z);if(s<0)c.scale.z=-1;g.add(c);const hem=new T.Mesh(rgeo(gw,2.6,2.8,.9),cm);hem.position.set(px,ry+.4,z);g.add(hem)});
  dec(name,g)}
 // printer window: both panels clear its sill (52 to 90). Bed window: the sloped ceiling starts near x 110 at rod height,
