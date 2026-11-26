@@ -5,13 +5,21 @@
 <title>Attic planner</title>
 <link rel="stylesheet" href="attic.css"></head><body><div id="a">
 <div class="b"><b>Attic planner</b>
-<button data-v="orbit">Overview</button><button data-v="plan">Plan</button><button data-v="stairs">From stairs</button><button data-v="bed">From bedroom end</button>
-<button id="undo" title="Ctrl or Cmd + Z">Undo</button><button id="lstb">Items</button><label>Walls <input type="color" id="wc" value="#c8a27a"></label>
-<button id="mv" title="When on, dragging empty space moves the view">Move view</button><button id="ms" title="Click two points to measure a distance">Measure</button><button id="mc" title="Remove all measurements">Clear</button><span class="row-flex"><button data-k="ArrowLeft" title="Move left">&larr;</button><button data-k="ArrowUp" title="Move forward">&uarr;</button><button data-k="ArrowDown" title="Move back">&darr;</button><button data-k="ArrowRight" title="Move right">&rarr;</button><button id="zi" title="Zoom in">+</button><button id="zo" title="Zoom out">&minus;</button></span>
-<small>Drag a piece to move it. Red means it does not fit. To move the view: Move view button, right-drag, two fingers, or arrow keys and WASD. Double-click the floor to look there. Measure: click two points, snaps near corners of pieces. Esc to exit.</small></div>
+<div class="grp" id="views"><button data-v="orbit" class="on">Overview</button><button data-v="plan">Plan</button><button data-v="stairs">From stairs</button><button data-v="bed">From bed end</button><button id="wk" title="Walk through at eye height">Walk</button></div>
+<button id="undo" title="Ctrl or Cmd + Z">Undo</button><button id="ms" title="Click two points to measure a distance">Measure</button><button id="mc" hidden>Clear measurements</button><button id="lstb">Show or hide</button><label>Walls <input type="color" id="wc" value="#c8a27a"></label><button id="hlp" title="How to use the planner">?</button></div>
 <div class="b" id="lst" hidden></div>
-<div id="c"></div>
-<div class="b" id="sel" hidden><span id="nm"></span><span id="msg"></span><button id="hid" title="H">Hide</button><button id="ctr">Center</button><button id="rot">Rotate</button><input type="color" id="col" value="#8a6a4f"><button id="del">Remove</button></div>
+<div id="c">
+<div class="ov" id="help" hidden>
+<h4>Looking around</h4><p>Drag empty space to turn the room. Scroll or pinch to zoom. Right-drag, Shift-drag, two fingers or the Slide button to slide the view. Arrow keys or WASD move. Double-click the floor to look there.</p>
+<h4>Furniture</h4><p>Pick a piece from the bottom bar, or Custom size for something you found. Drag to move it. Click a piece to type its real width, depth and height in inches. R rotates, H hides, Delete removes. Red means it does not fit, and the bar says why.</p>
+<h4>Walk</h4><p>W and S (or up and down arrows) walk. A and D (or left and right arrows) turn. Drag to look around. Double-click the floor to jump there. You cannot walk where the ceiling is below your eyes.</p>
+<h4>Measure</h4><p>Click two points. It snaps to the corners of pieces. Esc stops.</p>
+<h4>Undo</h4><p>Ctrl or Cmd + Z.</p></div>
+<div class="ov" id="wbar" hidden><b>Walking</b><label>Eye height <input type="number" id="eye" value="64" min="30" max="80" step="1"> in</label><span id="hr"></span><button id="wx">Exit walk</button></div>
+<div class="ov" id="pad"><button id="mv" title="When on, dragging empty space slides the view">Slide</button><button data-k="ArrowLeft" title="Left">&larr;</button><button data-k="ArrowUp" title="Forward">&uarr;</button><button data-k="ArrowDown" title="Back">&darr;</button><button data-k="ArrowRight" title="Right">&rarr;</button><button id="zi" title="Zoom in">+</button><button id="zo" title="Zoom out">&minus;</button></div>
+</div>
+<div class="b" id="sel" hidden><b id="nm"></b><label>W <input type="number" id="iw" min="1" step="0.5"></label><label>D <input type="number" id="idd" min="1" step="0.5"></label><label>H <input type="number" id="ih" min="0.5" step="0.5"></label><small>in</small><span id="msg"></span><span class="sp"></span><button id="rot" title="R">Rotate</button><button id="ctr">Center</button><button id="hid" title="H">Hide</button><input type="color" id="col" value="#8a6a4f" title="Color"><button id="del" title="Delete">Remove</button></div>
+<div class="b" id="cust" hidden><b>Custom piece</b><input type="text" id="cn" value="My find" aria-label="Name"><label>W <input type="number" id="cw" value="30" min="1" step="0.5"></label><label>D <input type="number" id="cd" value="18" min="1" step="0.5"></label><label>H <input type="number" id="chh" value="30" min="0.5" step="0.5"></label><small>in</small><button id="cadd">Add</button><button id="cx">Cancel</button></div>
 <div class="b" id="cat"></div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
