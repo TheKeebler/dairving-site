@@ -23,7 +23,9 @@ const tex=(n,fn,r)=>{const c=document.createElement('canvas');c.width=c.height=n
  pan=tex(64,(x,n)=>{x.fillStyle='rgba(40,15,0,.5)';x.fillRect(0,0,2,n);x.fillStyle='rgba(255,255,255,.25)';x.fillRect(2,0,1,n);for(let j=0;j<24;j++){x.fillStyle='rgba(90,40,10,.09)';x.fillRect(Math.random()*n,0,1,n)}},4);
 const WC=0xc8a27a,walls=[];
 quad([[0,0,0],[W,0,0],[W,0,HB],[0,0,HB]],0x7a4230,wood);
-quad([[0,0,HB],[W,0,HB],[W,0,L],[0,0,L]],0xd8c0b4,carpet);
+// carpet with a hole where the stairs come up (between the half wall and the closet wall)
+{const z0=HB+97,z1=HB+150.5,x0=BW+4.75,x1=BW+39.25,C=(a,b,c,d)=>quad([[a,0,c],[b,0,c],[b,0,d],[a,0,d]],0xd8c0b4,carpet);
+ C(0,W,HB,z0);C(0,x0,z0,z1);C(x1,W,z0,z1);C(0,W,z1,L)}
 quad([[RUN,CH,0],[W-RUN,CH,0],[W-RUN,CH,L],[RUN,CH,L]],0xeceae4,tile);
 [[[0,0,0],[0,0,L],[0,KH,L],[0,KH,0]],[[W,0,0],[W,0,L],[W,KH,L],[W,KH,0]],
  [[0,KH,0],[0,KH,L],[RUN,CH,L],[RUN,CH,0]],[[W,KH,0],[W,KH,L],[W-RUN,CH,L],[W-RUN,CH,0]],
@@ -41,6 +43,7 @@ const n0=sc.children.length,SR=9,ST=9.5,NT=11,LOW=-SR*(NT+1),SW=36,SXC=(BW+4.75+
  DW=29,DH=80,RW=33,BOXY=LOW+SR+122,LCH=LOW+96,TH=Math.atan(SR/ST),
  nose=z=>LOW+SR+(z-Z1)*SR/ST,
  PH=(LOW+DH-nose(DZ))*Math.cos(TH),PB=(BOXY-nose(CZ))*Math.cos(TH),PERP=Math.min(PH,PB);
+box(SW,SR,1,SXC,-SR/2,SZ+.5,0x8b6f5e);box(SW,.6,1.4,SXC,-.3,SZ+.7,0x6f5446);
 for(let k=1;k<=NT;k++){box(SW,SR*k,ST,SXC,LOW+SR*k/2,Z1+ST*(k-.5),0x8b6f5e);box(SW,.6,1.2,SXC,LOW+SR*k-.3,Z1+ST*(k-1)+.6,0x6f5446)}
 const shaft=[];
 [SX0-.5,SX1+.5].forEach(x=>{shaft.push(box(1,BOXY-LOW,CZ-DZ,x,(LOW+BOXY)/2,(DZ+CZ)/2,0xe9e6df),box(1,-LOW,SZ-CZ,x,LOW/2,(CZ+SZ)/2,0xe9e6df));
