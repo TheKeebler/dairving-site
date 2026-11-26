@@ -173,7 +173,7 @@ function undo(){const s=hist.pop();if(!s)return;dirty();items.slice().forEach(i=
  if(cur&&(!items.includes(cur)||!cur.visible))cur=null;upd();renderList()}
 const CAT=[['Queen bed',60,80,24,0xe6e2d8],['Full bed',54,75,24,0x4b4c50],['Twin bed',39,75,24,0xe6e2d8],['Dresser',60,18,32,0x6e5340],['Nightstand',25,16,23,0x8e4322],['Desk',48,24,30,0xa88b66],['Bookshelf',30,12,72,0x6e5340],['Wardrobe',36,22,72,0x7d6a58],['Sofa',80,36,32,0x5f7a86],['Armchair',32,32,18,0x8a5d4a],['TV stand',48,16,22,0x4a4540],['Rug 5x8',60,96,.6,0x7a3f3a],['Printer station',48,24,30,0x8a6a4f],['Rug 5x7',60,84,.6,0x9a4a2c],['Rug 6x9',72,108,.6,0x9a4a2c],['Floor mat',60,44,.3,0x4a4f55],['Plant',12,12,14,0xa4522f],['Side table',27,23,20,0xb98748],['Floor lamp',11,11,1.2,0x16161a],['Wire shelf',36,14,48,0x8a8f96],['Big mirror',20,7,36,0xc9a24a],['Hall runner',30,120,.5,0x8b4a2e],['Rug 6x6',73,73,.6,0x8f9b78],['Woven basket',16,16,15,0xc8a56a]];
 // extra height that sits above the base box (headboard, printer, leaves, chair back, lamp pole)
-const EX=n=>/ bed$/.test(n)?14:({'Printer station':31,Plant:26,Armchair:16,'Floor lamp':52.8})[n]||0;
+const EX=n=>/ bed$/.test(n)?14:({'Printer station':20,Plant:26,Armchair:16,'Floor lamp':52.8})[n]||0;
 const GRP={Furniture:['Queen bed','Full bed','Twin bed','Dresser','Nightstand','Side table','Desk','Bookshelf','Wardrobe','Sofa','Armchair','TV stand'],Rugs:['Rug 5x8','Rug 5x7','Rug 6x9','Rug 6x6','Hall runner','Floor mat'],Decor:['Plant','Floor lamp','Big mirror','Woven basket'],Hobby:['Printer station','Wire shelf']};
 function make(c){const [n,w,d,h,col]=c,m=new T.Mesh(new T.BoxGeometry(w,h,d),mat(col));
  m.add(new T.LineSegments(new T.EdgesGeometry(m.geometry),new T.LineBasicMaterial({color:0x222222})));
@@ -259,11 +259,37 @@ function mirror(m){const {w,h}=m.userData;m.material.transparent=true;m.material
  const f=new T.Mesh(new T.ExtrudeGeometry(fr,{depth:1.2,bevelEnabled:false}),mat(0xc9a24a));f.position.set(0,h/2,.2);
  const g=new T.Mesh(new T.ShapeGeometry(pill(new T.Shape(),w/2-.9,h-1.8)),new T.MeshStandardMaterial({color:0xa9c2c8,emissive:0x203438}));g.position.set(0,h/2,1.1);const lg=new T.Group();lg.position.set(0,-h/2,2.7);lg.rotation.x=-.17;lg.add(f,g);m.add(lg)}
 function runner(m){const {w,d}=m.userData;[-1,1].forEach(s=>{const b=new T.Mesh(new T.BoxGeometry(2,.15,d-6),mat(0xe9dcc0));b.position.set(s*(w/2-4),.3,0);m.add(b)})}
-// 48 x 24 table with Form Studio 1 (14.2 x 13 x 19.8), VOC extractor (5.2 x 5.2 x 8.1), Wash+Cure (13 x 11.8 x 17.3)
-function station(m,h){{const {w,d}=m.userData,F=-h/2;hide(m);const t=woodMat(m);bx(m,w,1.5,d,t,0,h/2-.75,0);legs(m,w,d,h-1.5,F,2,1.1)}
- const P=(w,hh,d,x,z,c)=>{const b=new T.Mesh(new T.BoxGeometry(w,hh,d),mat(c));b.position.set(x,h/2+hh/2,z);m.add(b);return b};
- P(14.2,12,13,-15,0,0xdcdcd8);const lid=P(14.2,7.8,13,-15,0,0xe8742a);lid.position.y+=12;
- P(5.2,8.1,5.2,-3.5,5,0x2a2a2a);P(13,17.3,11.8,12,0,0xe6e6e2)}
+// 48 x 24 table with a Form Studio 1 (13.5 x 12.4 x 19.8 in: teal Founders Edition base, front touchscreen, orange cover),
+// VOC extractor hosed to the vent port, Wash+Cure (13 x 11.8 x 17.3 in) and everyday printing clutter
+function screenTex(){const c=document.createElement('canvas');c.width=256;c.height=160;const x=c.getContext('2d');x.fillStyle='#0f1418';x.fillRect(0,0,256,160);
+ x.fillStyle='#e8eef2';x.font='bold 22px sans-serif';x.fillText('Printing',18,42);x.font='16px sans-serif';x.fillStyle='#9fb0bb';x.fillText('Layer 412 / 980',18,70);
+ x.fillStyle='#2b343b';x.fillRect(18,96,220,12);x.fillStyle='#f07a2a';x.fillRect(18,96,93,12);x.fillStyle='#e8eef2';x.fillText('42%   1h 08m left',18,136);return new T.CanvasTexture(c)}
+function station(m,h){const {w,d}=m.userData,F=-h/2,T0=h/2;hide(m);const t=woodMat(m);bx(m,w,1.5,d,t,0,T0-.75,0);legs(m,w,d,h-1.5,F,2,1.1);
+ const gr=mat(0x3a3d42,{roughness:.45,metalness:.2}),gr2=mat(0x55595f,{roughness:.5,metalness:.2}),blk=mat(0x15171a,{roughness:.3}),alu=mat(0xc9ccd0,{metalness:.8,roughness:.3});
+ // printer
+ const px=-13,pz=-1,teal=mat(0x1a8585,{roughness:.4,metalness:.15}),teal2=mat(0x12605f,{roughness:.45,metalness:.15});rb(m,13.5,8.6,12.4,.9,teal,px,T0+4.3,pz);rb(m,13.6,.5,12.5,.2,teal2,px,T0+8.8,pz);
+ const sc1=new T.Mesh(new T.PlaneGeometry(5.2,3.2),new T.MeshBasicMaterial({map:screenTex()}));sc1.position.set(px+3,T0+5.6,pz+6.25);sc1.rotation.x=-.18;m.add(sc1);
+ bx(m,5.6,3.6,.2,blk,px+3,T0+5.6,pz+6.15).rotation.x=-.18;
+ bx(m,10,1.2,8,blk,px,T0+9.6,pz+.5);bx(m,.9,10,.9,alu,px,T0+14,pz-4.5);bx(m,7.5,.5,6,alu,px,T0+13,pz+.5);bx(m,1.2,2.2,4,alu,px,T0+14.3,pz-1.5);
+ const cov=rb(m,13.3,11,12.2,.7,mat(0xf26a1b,{transparent:true,opacity:.5,roughness:.12,depthWrite:false}),px,T0+14.5,pz);cov.userData.noShadow=true;cov.renderOrder=2;
+ cy(m,.9,.9,1.2,blk,px+4.5,T0+6,pz-6.6,12).rotation.x=Math.PI/2;
+ // VOC extractor and its hose to the vent port
+ const vx=-1.5,vz=-6;rb(m,5.2,8.1,5.2,1.6,gr,vx,T0+4.05,vz);for(let k=0;k<5;k++)bx(m,3.6,.18,.15,blk,vx,T0+8.12,vz-1.6+k*.8);
+ cy(m,.55,.55,.1,mat(0x7fd38a,{emissive:0x2f8a3a}),vx,T0+5.5,vz+2.62,10).rotation.x=Math.PI/2;
+ {const cv=new T.CatmullRomCurve3([[px+4.5,T0+6,pz-7.2],[px+4.5,T0+5,pz-9.5],[vx-1,T0+3,vz-4.5],[vx,T0+3,vz-2.6]].map(a=>new T.Vector3(...a)));
+  m.add(new T.Mesh(new T.TubeGeometry(cv,24,.75,10,false),mat(0x24262a,{roughness:.6})))}
+ // Wash+Cure
+ const wx=12,wz=0;rb(m,13,12.3,11.8,1.2,gr,wx,T0+6.15,wz);rb(m,13.2,5,12,1.2,gr2,wx,T0+14.8,wz);
+ const win=rb(m,7,3.6,.5,.4,mat(0xf26a1b,{transparent:true,opacity:.6,roughness:.12}),wx,T0+15,wz+5.9);win.userData.noShadow=true;
+ bx(m,8,.6,.4,blk,wx,T0+12.6,wz+6);
+ const sc2=new T.Mesh(new T.PlaneGeometry(3.2,1.8),new T.MeshBasicMaterial({color:0x1d2a33}));sc2.position.set(wx+3.6,T0+9.5,wz+5.95);m.add(sc2);
+ // clutter: resin bottle, IPA bottle, paper towels, gloves box, printed minis
+ const rbt=mat(0x2b2d30,{roughness:.35});cy(m,1.9,1.9,6,rbt,21,T0+3,7.5,18);cy(m,.9,.9,1.2,mat(0xf26a1b),21,T0+6.6,7.5,12);
+ cy(m,1.6,1.6,8,mat(0xdfe9ee,{transparent:true,opacity:.75,roughness:.1}),-22.5,T0+4,7,18).userData.noShadow=true;cy(m,.7,.7,1.4,mat(0x2a62b8),-22.5,T0+8.7,7,12);
+ const pt=cy(m,2.4,2.4,11,mat(0xf6f4ef,{roughness:1}),20.5,T0+2.4,-7,20);pt.rotation.z=Math.PI/2;
+ rb(m,5,3,9.5,.3,mat(0x3a6fb5,{roughness:.6}),-21,T0+1.5,-6);bx(m,3,.1,1.6,mat(0xe6ecf2),-21,T0+3.05,-6);
+ const mini=mat(0x8d9196,{roughness:.55});[[-3,7.5],[-.5,8.3],[2,7.2]].forEach((a,i)=>{cy(m,.8,.8,.3,blk,a[0],T0+.15,a[1],14);cy(m,.35,.45,1.6+i*.3,mini,a[0],T0+1.1+i*.15,a[1],10);
+  const hd=new T.Mesh(new T.SphereGeometry(.38,10,8),mini);hd.position.set(a[0],T0+2.2+i*.3,a[1]);m.add(hd)})}
 function chk(m){const {w,d,h}=m.userData,r=m.rotation.y,c=Math.abs(Math.cos(r)),s=Math.abs(Math.sin(r)),
  hx=(w*c+d*s)/2,hz=(w*s+d*c)/2,x=m.position.x,z=m.position.z;
  if(x-hx<-.5||x+hx>W+.5||z-hz<-.5||z+hz>L+.5)return 'Outside the room';
@@ -300,7 +326,7 @@ $('cadd').onclick=()=>{const w=+$('cw').value,d=+$('cd').value,h=+$('chh').value
 $('cust').onkeydown=e=>{if(e.key=='Enter')$('cadd').click();if(e.key=='Escape')$('cx').click()};
 ['iw','idd','ih'].forEach(i=>{$(i).onchange=()=>resize(+$('iw').value,+$('idd').value,+$('ih').value);$(i).onkeydown=e=>{if(e.key=='Enter')e.target.blur()}});
 {const b=add(CAT[1]);b.rotation.y=Math.PI/2;b.position.set(37.5,12,72);selm(null)}
-{const s=add(CAT.find(c=>c[0]=='Printer station'));s.position.set(71,15,384);selm(null)}
+{const s=add(CAT.find(c=>c[0]=='Printer station'));s.position.set(71,15,384);s.rotation.y=Math.PI;selm(null)}
 {const f=n=>add(CAT.find(c=>c[0]==n));
  const r=f('Rug 6x6');r.position.set(61.5,.3,72);
  const ns=f('Nightstand');ns.rotation.y=Math.PI/2;ns.position.set(8.5,11.5,115);
