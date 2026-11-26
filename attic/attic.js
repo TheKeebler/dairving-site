@@ -23,8 +23,8 @@ const tex=(n,fn,r)=>{const c=document.createElement('canvas');c.width=c.height=n
  pan=tex(64,(x,n)=>{x.fillStyle='rgba(40,15,0,.5)';x.fillRect(0,0,2,n);x.fillStyle='rgba(255,255,255,.25)';x.fillRect(2,0,1,n);for(let j=0;j<24;j++){x.fillStyle='rgba(90,40,10,.09)';x.fillRect(Math.random()*n,0,1,n)}},4);
 const WC=0xc8a27a,walls=[];
 quad([[0,0,0],[W,0,0],[W,0,HB],[0,0,HB]],0x7a4230,wood);
-// carpet with a hole where the stairs come up (between the half wall and the closet wall)
-{const z0=HB+97,z1=HB+150.5,x0=BW+4.75,x1=BW+39.25,C=(a,b,c,d)=>quad([[a,0,c],[b,0,c],[b,0,d],[a,0,d]],0xd8c0b4,carpet);
+// carpet with a hole where the stairs come up, running back under the cabinet block to above the stair door
+{const z0=HB+40,z1=HB+150.5,x0=BW+4.75,x1=BW+39.25,C=(a,b,c,d)=>quad([[a,0,c],[b,0,c],[b,0,d],[a,0,d]],0xd8c0b4,carpet);
  C(0,W,HB,z0);C(0,x0,z0,z1);C(x1,W,z0,z1);C(0,W,z1,L)}
 quad([[RUN,CH,0],[W-RUN,CH,0],[W-RUN,CH,L],[RUN,CH,L]],0xeceae4,tile);
 [[[0,0,0],[0,0,L],[0,KH,L],[0,KH,0]],[[W,0,0],[W,0,L],[W,KH,L],[W,KH,0]],
@@ -34,27 +34,30 @@ quad([[RUN,CH,0],[W-RUN,CH,0],[W-RUN,CH,L],[RUN,CH,L]],0xeceae4,tile);
 // cabinet block (97 in), stair half wall, closet wall and stairwell opening
 const CZ=HB+97,SZ=CZ+53.5,SX=BW+39.25,SH=KH+(CH-KH)*(W-SX)/RUN,
  ext=(pts,z0,len,c)=>{const m=new T.Mesh(new T.ExtrudeGeometry(new T.Shape(pts.map(a=>new T.Vector2(...a))),{depth:len,bevelEnabled:false}),mat(c));m.position.z=z0;sc.add(m)};
-ext([[BW,0],[W,0],[W,KH],[W-RUN,CH],[BW,CH]],HB,97,0x784a29);
+const SR=9,ST=9.5,NT=11,LOW=-SR*(NT+1),SW=36,SXC=(BW+4.75+SX)/2,SX0=SXC-SW/2,SX1=SXC+SW/2,Z1=SZ-NT*ST,DZ=Z1-6,
+ DW=29,DH=80,RW=33,BOXY=LOW+SR+122,LCH=LOW+96,TH=Math.atan(SR/ST),
+ nose=z=>LOW+SR+(z-Z1)*SR/ST,
+ PH=(LOW+DH-nose(DZ))*Math.cos(TH),PB=(BOXY-nose(CZ))*Math.cos(TH),PERP=Math.min(PH,PB);
+// cabinet block over the hall; where it hangs over the lower stairs its underside is BOXY above the attic floor
+ext([[BW,0],[W,0],[W,KH],[W-RUN,CH],[BW,CH]],HB,DZ-HB,0x784a29);
+ext([[BW,0],[SX0,0],[SX0,BOXY],[SX1,BOXY],[SX1,0],[W,0],[W,KH],[W-RUN,CH],[BW,CH]],DZ,CZ-DZ,0x784a29);
 ext([[SX,0],[W,0],[W,KH],[SX,SH]],CZ,53.5,0xe4e6e8);
 box(4.75,33.5,53.5,BW+2.4,16.75,CZ+26.75,0x784a29);
 // stairs down to the second floor: 12 risers of 9 in, 11 treads of 9.5 in, 36 in wall to wall,
 // handrail on the left going up (33 in to the far wall), 29 x 80 in door 6 in before the first step
-const n0=sc.children.length,SR=9,ST=9.5,NT=11,LOW=-SR*(NT+1),SW=36,SXC=(BW+4.75+SX)/2,SX0=SXC-SW/2,SX1=SXC+SW/2,Z1=SZ-NT*ST,DZ=Z1-6,
- DW=29,DH=80,RW=33,BOXY=LOW+SR+122,LCH=LOW+96,TH=Math.atan(SR/ST),
- nose=z=>LOW+SR+(z-Z1)*SR/ST,
- PH=(LOW+DH-nose(DZ))*Math.cos(TH),PB=(BOXY-nose(CZ))*Math.cos(TH),PERP=Math.min(PH,PB);
-box(SW,SR,1,SXC,-SR/2,SZ+.5,0x8b6f5e);box(SW,.6,1.4,SXC,-.3,SZ+.7,0x6f5446);
-for(let k=1;k<=NT;k++){box(SW,SR*k,ST,SXC,LOW+SR*k/2,Z1+ST*(k-.5),0x8b6f5e);box(SW,.6,1.2,SXC,LOW+SR*k-.3,Z1+ST*(k-1)+.6,0x6f5446)}
+
+box(SW,SR-.2,1,SXC,-SR/2-.1,SZ+.5,0x8b6f5e);
+for(let k=1;k<=NT;k++){box(SW,SR*k,ST,SXC,LOW+SR*k/2,Z1+ST*(k-.5),0x8b6f5e);box(SW-.2,.7,1.3,SXC,LOW+SR*k-.3,Z1+ST*(k-1)+.6,0x6f5446)}
 const shaft=[];
-[SX0-.5,SX1+.5].forEach(x=>{shaft.push(box(1,BOXY-LOW,CZ-DZ,x,(LOW+BOXY)/2,(DZ+CZ)/2,0xe9e6df),box(1,-LOW,SZ-CZ,x,LOW/2,(CZ+SZ)/2,0xe9e6df));
- box(1.2,5,SZ-DZ,x+(x<SXC?1:-1),LOW+2.5,(DZ+SZ)/2,0x8a5a30)});
-shaft.push(box(SW+2,1,CZ-DZ,SXC,BOXY+.5,(DZ+CZ)/2,0x9a6a3a));box(SW,33.5-BOXY,1,SXC,(BOXY+33.5)/2,CZ-.5,0x84502c);
+[SX0-.5,SX1+.5].forEach(x=>{shaft.push(box(1,BOXY-LOW-.1,CZ-DZ-.2,x,(LOW+BOXY-.1)/2,(DZ+CZ)/2,0xe9e6df),box(1,-LOW-.2,SZ-CZ,x,(LOW-.2)/2,(CZ+SZ)/2,0xe9e6df));
+ box(1.2,5,SZ-DZ,x+(x<SXC?1.1:-1.1),LOW+2.6,(DZ+SZ)/2,0x8a5a30)});
+
 {const g=new T.Mesh(new T.SphereGeometry(3.2,12,8),gl0());g.position.set(SXC,BOXY-3,DZ+30);sc.add(g)}
 // downstairs: wall with the doorway, a bit of floor and the open door
 shaft.push(box(SXC-DW/2-(SXC-60),LCH-LOW,4,(60+SXC-DW/2)/2,(LOW+LCH)/2,DZ-2,0xe9e6df),box(133-(SXC+DW/2),LCH-LOW,4,(133+SXC+DW/2)/2,(LOW+LCH)/2,DZ-2,0xe9e6df),
  box(DW,LCH-LOW-DH,4,SXC,LOW+DH+(LCH-LOW-DH)/2,DZ-2,0xe9e6df));
 [[SXC-DW/2-1.5,3,DH+3,LOW+(DH+3)/2],[SXC+DW/2+1.5,3,DH+3,LOW+(DH+3)/2],[SXC,DW+6,3,LOW+DH+1.5]].forEach(a=>box(a[1],a[2],5,a[0],a[3],DZ-2,0xf4f2ec));
-box(90,1,90,SXC,LOW-.5,DZ-45,0x5d5a57);
+box(90,1,90,SXC,LOW-.6,DZ-45,0x5d5a57);
 box(1.4,DH-1,DW,SXC+DW/2,LOW+DH/2,DZ-4-DW/2,0xf4f2ec);
 {const a=new T.Vector3(SX1-2.6,nose(Z1)+34,Z1),b=new T.Vector3(SX1-2.6,nose(SZ-ST)+34,SZ-ST),d=b.clone().sub(a),
  r=new T.Mesh(new T.CylinderGeometry(1,1,d.length(),10),mat(0x9a6430));r.position.copy(a).add(b).multiplyScalar(.5);
